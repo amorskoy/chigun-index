@@ -20,6 +20,8 @@ object SaveToES {
 
     val files = sc.wholeTextFiles("/projects/chigun-index/resources/txt/*")
 
+    // And maybe after:
+    sc.makeRDD(files).saveToEs("chigun/issues")
 
     textFile
 	.flatMap(line => line.split(" "))
