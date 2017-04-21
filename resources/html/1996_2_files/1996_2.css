@@ -1,0 +1,29 @@
+﻿ table.main {}
+ tr.row {}
+ td.cell {}
+ div.block {}
+ div.paragraph {}
+ .font0 { font:4pt Arial, sans-serif; }
+ .font1 { font:8pt Arial, sans-serif; }
+ .font2 { font:9pt Arial, sans-serif; }
+ .font3 { font:10pt Arial, sans-serif; }
+ .font4 { font:11pt Arial, sans-serif; }
+ .font5 { font:14pt Arial, sans-serif; }
+ .font6 { font:15pt Arial, sans-serif; }
+ .font7 { font:17pt Arial, sans-serif; }
+ .font8 { font:23pt Arial, sans-serif; }
+ .font9 { font:18pt Candara, sans-serif; }
+ .font10 { font:24pt Franklin Gothic Medium, sans-serif; }
+ .font11 { font:19pt Microsoft Sans Serif, sans-serif; }
+ .font12 { font:5pt Tahoma, sans-serif; }
+ .font13 { font:8pt Tahoma, sans-serif; }
+ .font14 { font:13pt Tahoma, sans-serif; }
+ .font15 { font:14pt Tahoma, sans-serif; }
+ .font16 { font:24pt Tahoma, sans-serif; }
+ .font17 { font:7pt Times New Roman, serif; }
+ .font18 { font:8pt Times New Roman, serif; }
+ .font19 { font:10pt Times New Roman, serif; }
+ .font20 { font:11pt Times New Roman, serif; }
+ .font21 { font:15pt Times New Roman, serif; }
+ .font22 { font:17pt Times New Roman, serif; }
+ .font23 { font:30pt Times New Roman, serif; }

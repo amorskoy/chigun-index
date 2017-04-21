@@ -1,0 +1,33 @@
+﻿ table.main {}
+ tr.row {}
+ td.cell {}
+ div.block {}
+ div.paragraph {}
+ .font0 { font:6pt Arial, sans-serif; }
+ .font1 { font:10pt Cambria, serif; }
+ .font2 { font:11pt Cambria, serif; }
+ .font3 { font:15pt Cambria, serif; }
+ .font4 { font:17pt Cambria, serif; }
+ .font5 { font:19pt Cambria, serif; }
+ .font6 { font:48pt Cambria, serif; }
+ .font7 { font:22pt Candara, sans-serif; }
+ .font8 { font:15pt Lucida Sans Unicode, sans-serif; }
+ .font9 { font:4pt Microsoft Sans Serif, sans-serif; }
+ .font10 { font:6pt Microsoft Sans Serif, sans-serif; }
+ .font11 { font:8pt Microsoft Sans Serif, sans-serif; }
+ .font12 { font:9pt Microsoft Sans Serif, sans-serif; }
+ .font13 { font:10pt Microsoft Sans Serif, sans-serif; }
+ .font14 { font:11pt Microsoft Sans Serif, sans-serif; }
+ .font15 { font:12pt Microsoft Sans Serif, sans-serif; }
+ .font16 { font:13pt Microsoft Sans Serif, sans-serif; }
+ .font17 { font:15pt Microsoft Sans Serif, sans-serif; }
+ .font18 { font:4pt Times New Roman, serif; }
+ .font19 { font:8pt Times New Roman, serif; }
+ .font20 { font:9pt Times New Roman, serif; }
+ .font21 { font:11pt Times New Roman, serif; }
+ .font22 { font:12pt Times New Roman, serif; }
+ .font23 { font:13pt Times New Roman, serif; }
+ .font24 { font:17pt Times New Roman, serif; }
+ .font25 { font:9pt Verdana, sans-serif; }
+ .font26 { font:15pt Verdana, sans-serif; }
+ .font27 { font:17pt Verdana, sans-serif; }

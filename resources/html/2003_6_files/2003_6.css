@@ -1,0 +1,24 @@
+﻿ table.main {}
+ tr.row {}
+ td.cell {}
+ div.block {}
+ div.paragraph {}
+ .font0 { font:11pt Impact, sans-serif; }
+ .font1 { font:7pt Tahoma, sans-serif; }
+ .font2 { font:8pt Tahoma, sans-serif; }
+ .font3 { font:9pt Tahoma, sans-serif; }
+ .font4 { font:5pt Times New Roman, serif; }
+ .font5 { font:8pt Times New Roman, serif; }
+ .font6 { font:10pt Times New Roman, serif; }
+ .font7 { font:11pt Times New Roman, serif; }
+ .font8 { font:31pt Times New Roman, serif; }
+ .font9 { font:16pt Trebuchet MS, sans-serif; }
+ .font10 { font:23pt Trebuchet MS, sans-serif; }
+ .font11 { font:7pt Verdana, sans-serif; }
+ .font12 { font:9pt Verdana, sans-serif; }
+ .font13 { font:10pt Verdana, sans-serif; }
+ .font14 { font:11pt Verdana, sans-serif; }
+ .font15 { font:13pt Verdana, sans-serif; }
+ .font16 { font:14pt Verdana, sans-serif; }
+ .font17 { font:16pt Verdana, sans-serif; }
+ .font18 { font:17pt Verdana, sans-serif; }
