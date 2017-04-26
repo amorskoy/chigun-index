@@ -1,0 +1,172 @@
+{
+  "paragraphs": [
+    {
+      "text": "    import org.elasticsearch.spark._ \n    spark.conf.set(\"es.index.auto.create\", \"true\")\n    val base \u003d \"/resources/txt\"",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 11:12:29 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nimport org.elasticsearch.spark._\n\nbase: String \u003d /resources/txt\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493196941368_-1554354555",
+      "id": "20170426-085541_1052140687",
+      "dateCreated": "Apr 26, 2017 8:55:41 AM",
+      "dateStarted": "Apr 26, 2017 11:12:29 AM",
+      "dateFinished": "Apr 26, 2017 11:13:03 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val files \u003d sc.wholeTextFiles(s\"$base/*\")",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 11:13:33 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nfiles: org.apache.spark.rdd.RDD[(String, String)] \u003d /resources/txt/* MapPartitionsRDD[1] at wholeTextFiles at \u003cconsole\u003e:32\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493196965551_537955936",
+      "id": "20170426-085605_952256959",
+      "dateCreated": "Apr 26, 2017 8:56:05 AM",
+      "dateStarted": "Apr 26, 2017 11:13:33 AM",
+      "dateFinished": "Apr 26, 2017 11:13:36 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "case class EsDoc(path: String, body: String)\nval processed \u003d files.map(s\u003d\u003e(s._1.split(\"/\").takeRight(1)(0).replace(\".htm.txt\",\"\"), s._2)).map(s \u003d\u003e EsDoc(s._1, s._2))",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 11:23:25 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\ndefined class EsDoc\n\nprocessed: org.apache.spark.rdd.RDD[EsDoc] \u003d MapPartitionsRDD[6] at map at \u003cconsole\u003e:36\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493197670000_1683920930",
+      "id": "20170426-090750_334048111",
+      "dateCreated": "Apr 26, 2017 9:07:50 AM",
+      "dateStarted": "Apr 26, 2017 11:23:25 AM",
+      "dateFinished": "Apr 26, 2017 11:23:26 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "processed.saveToEs(\"chigun/issues\")",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 11:23:54 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1493197853088_66130070",
+      "id": "20170426-091053_1878274955",
+      "dateCreated": "Apr 26, 2017 9:10:53 AM",
+      "dateStarted": "Apr 26, 2017 11:23:54 AM",
+      "dateFinished": "Apr 26, 2017 11:24:03 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1493204037999_1962950297",
+      "id": "20170426-105357_738960435",
+      "dateCreated": "Apr 26, 2017 10:53:57 AM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Save TXT to ElasticSearch",
+  "id": "2CER6H4EM",
+  "angularObjects": {
+    "2CH8PPFVZ:shared_process": [],
+    "2CFRQ9SMH:shared_process": [],
+    "2CHE54C2S:shared_process": [],
+    "2CEYR2FT7:shared_process": [],
+    "2CE8AUWHE:shared_process": [],
+    "2CE19C2AQ:shared_process": [],
+    "2CDQDZX1W:shared_process": [],
+    "2CE85U3XY:shared_process": [],
+    "2CGZ7KJNA:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}

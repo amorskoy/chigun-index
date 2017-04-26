@@ -1,1 +1,3 @@
 esdata/*
+derby.log
+metastore_db/*
