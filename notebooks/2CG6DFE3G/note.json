@@ -1,0 +1,290 @@
+{
+  "paragraphs": [
+    {
+      "text": "import org.elasticsearch.spark._",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 12:39:16 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nimport org.elasticsearch.spark._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493210003352_-2122531720",
+      "id": "20170426-123323_1206961085",
+      "dateCreated": "Apr 26, 2017 12:33:23 PM",
+      "dateStarted": "Apr 26, 2017 12:39:16 PM",
+      "dateFinished": "Apr 26, 2017 12:39:16 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val term \u003d \"чаньмигун\"",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 12:39:17 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nterm: String \u003d чаньмигун\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493210345907_-1884465741",
+      "id": "20170426-123905_534596010",
+      "dateCreated": "Apr 26, 2017 12:39:05 PM",
+      "dateStarted": "Apr 26, 2017 12:39:18 PM",
+      "dateFinished": "Apr 26, 2017 12:39:18 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val query \u003d s\"\"\" {\n  \\\"_source\\\" : [\\\"path\\\"],\n  \\\"query\\\" : {\n    \\\"fuzzy\\\" : {\n      \\\"body\\\" : {\n        \\\"value\\\" : \\\"${z.input(\"term\")}\\\",\n        \\\"boost\\\" : 1.0\n      }\n    }\n  },\n\n \\\"highlight\\\" : {\n        \\\"pre_tags\\\" : [\\\"\u003cem style\u003d\u0027color:red;\u0027\u003e\\\"],\n        \\\"post_tags\\\" : [\\\"\u003c/em\u003e\\\"],\n        \\\"fields\\\" : {\n            \\\"body\\\" : {}\n        }\n    }\n}\n\"\"\"",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 1:32:30 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": false,
+        "editorHide": false
+      },
+      "settings": {
+        "params": {
+          "term": "чаньмигун"
+        },
+        "forms": {
+          "term": {
+            "name": "term",
+            "displayName": "term",
+            "type": "input",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nquery: String \u003d\n\" {\n  \"_source\" : [\"path\"],\n  \"query\" : {\n    \"fuzzy\" : {\n      \"body\" : {\n        \"value\" : \"чаньмигун\",\n        \"boost\" : 1.0\n      }\n    }\n  },\n\n \"highlight\" : {\n        \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n        \"post_tags\" : [\"\u003c/em\u003e\"],\n        \"fields\" : {\n            \"body\" : {}\n        }\n    }\n}\n\"\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493210141646_-1726793668",
+      "id": "20170426-123541_72611410",
+      "dateCreated": "Apr 26, 2017 12:35:41 PM",
+      "dateStarted": "Apr 26, 2017 1:32:30 PM",
+      "dateFinished": "Apr 26, 2017 1:32:31 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "val rdd \u003d sc.esRDD(\"chigun/issues\", query) ",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 12:41:13 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nrdd: org.apache.spark.rdd.RDD[(String, scala.collection.Map[String,AnyRef])] \u003d ScalaEsRDD[0] at RDD at AbstractEsRDD.scala:37\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493210322207_-1454347119",
+      "id": "20170426-123842_1919120809",
+      "dateCreated": "Apr 26, 2017 12:38:42 PM",
+      "dateStarted": "Apr 26, 2017 12:41:13 PM",
+      "dateFinished": "Apr 26, 2017 12:41:15 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "%elasticsearch\nsearch /chigun/issues {\n  \"_source\" : [\"path\"],\n  \"query\" : {\n    \"fuzzy\" : {\n      \"body\" : {\n        \"value\" : \"${term}\",\n        \"boost\" : 1.0\n      }\n    }\n  },\n\n \"highlight\" : {\n        \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n        \"post_tags\" : [\"\u003c/em\u003e\"],\n        \"fields\" : {\n            \"body\" : {}\n        }\n    }\n}\n",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 1:22:19 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {
+          "0": {
+            "graph": {
+              "mode": "table",
+              "height": 300.0,
+              "optionOpen": false
+            },
+            "helium": {}
+          }
+        },
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/undefined"
+      },
+      "settings": {
+        "params": {
+          "term": "чаньмигун"
+        },
+        "forms": {
+          "term": {
+            "name": "term",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TABLE",
+            "data": "path\n2003_5\n1995_1\n1993-3\n1992_5\n1994_2\n2003_6\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493210492990_-860032661",
+      "id": "20170426-124132_1090252373",
+      "dateCreated": "Apr 26, 2017 12:41:32 PM",
+      "dateStarted": "Apr 26, 2017 1:22:19 PM",
+      "dateFinished": "Apr 26, 2017 1:22:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "user": "anonymous",
+      "config": {},
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1493213254416_-1730400904",
+      "id": "20170426-132734_762500903",
+      "dateCreated": "Apr 26, 2017 1:27:34 PM",
+      "status": "READY",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Make query to ElasticSearch",
+  "id": "2CG6DFE3G",
+  "angularObjects": {
+    "2CFR2BDMT:shared_process": [],
+    "2CFR7UKZ1:shared_process": [],
+    "2CGFZVG7D:shared_process": [],
+    "2CF3WWS9J:shared_process": [],
+    "2CE91BQFF:shared_process": [
+      {
+        "name": "search_20170426_124132_1090252373",
+        "object": [
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOdoEUet1mo5UwKz",
+            "source": "{\"path\":\"2003_5\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPRFEUet1mo5UwLV",
+            "source": "{\"path\":\"1995_1\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOHpEUet1mo5UwKp",
+            "source": "{\"path\":\"1993-3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPJUEUet1mo5UwLQ",
+            "source": "{\"path\":\"1992_5\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPR9EUet1mo5UwLY",
+            "source": "{\"path\":\"1994_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOdoEUet1mo5UwK1",
+            "source": "{\"path\":\"2003_6\"}"
+          }
+        ]
+      }
+    ],
+    "2CFWNZWFW:shared_process": [],
+    "2CF6E2PQT:shared_process": [],
+    "2CF41VDSH:shared_process": [],
+    "2CGFT46NY:shared_process": []
+  },
+  "config": {},
+  "info": {}
+}
