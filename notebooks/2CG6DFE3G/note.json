@@ -1,9 +1,45 @@
 {
   "paragraphs": [
     {
+      "text": "%spark.dep\nz.load(\"com.github.gphat:wabisabi_2.11:2.2.0\")",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 2:03:27 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res0: org.apache.zeppelin.dep.Dependency \u003d org.apache.zeppelin.dep.Dependency@26ed0bdd\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493215170711_-918249647",
+      "id": "20170426-135930_923398002",
+      "dateCreated": "Apr 26, 2017 1:59:30 PM",
+      "dateStarted": "Apr 26, 2017 2:03:27 PM",
+      "dateFinished": "Apr 26, 2017 2:03:56 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "text": "import org.elasticsearch.spark._",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 12:39:16 PM",
+      "dateUpdated": "Apr 26, 2017 2:04:29 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -31,51 +67,15 @@
       "jobName": "paragraph_1493210003352_-2122531720",
       "id": "20170426-123323_1206961085",
       "dateCreated": "Apr 26, 2017 12:33:23 PM",
-      "dateStarted": "Apr 26, 2017 12:39:16 PM",
-      "dateFinished": "Apr 26, 2017 12:39:16 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "val term \u003d \"чаньмигун\"",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 12:39:17 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "\nterm: String \u003d чаньмигун\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493210345907_-1884465741",
-      "id": "20170426-123905_534596010",
-      "dateCreated": "Apr 26, 2017 12:39:05 PM",
-      "dateStarted": "Apr 26, 2017 12:39:18 PM",
-      "dateFinished": "Apr 26, 2017 12:39:18 PM",
+      "dateStarted": "Apr 26, 2017 2:04:29 PM",
+      "dateFinished": "Apr 26, 2017 2:04:43 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "val query \u003d s\"\"\" {\n  \\\"_source\\\" : [\\\"path\\\"],\n  \\\"query\\\" : {\n    \\\"fuzzy\\\" : {\n      \\\"body\\\" : {\n        \\\"value\\\" : \\\"${z.input(\"term\")}\\\",\n        \\\"boost\\\" : 1.0\n      }\n    }\n  },\n\n \\\"highlight\\\" : {\n        \\\"pre_tags\\\" : [\\\"\u003cem style\u003d\u0027color:red;\u0027\u003e\\\"],\n        \\\"post_tags\\\" : [\\\"\u003c/em\u003e\\\"],\n        \\\"fields\\\" : {\n            \\\"body\\\" : {}\n        }\n    }\n}\n\"\"\"",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 1:32:30 PM",
+      "dateUpdated": "Apr 26, 2017 2:45:38 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -85,7 +85,7 @@
           "editOnDblClick": false
         },
         "editorMode": "ace/mode/scala",
-        "tableHide": false,
+        "tableHide": true,
         "editorHide": false
       },
       "settings": {
@@ -115,44 +115,8 @@
       "jobName": "paragraph_1493210141646_-1726793668",
       "id": "20170426-123541_72611410",
       "dateCreated": "Apr 26, 2017 12:35:41 PM",
-      "dateStarted": "Apr 26, 2017 1:32:30 PM",
-      "dateFinished": "Apr 26, 2017 1:32:31 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "val rdd \u003d sc.esRDD(\"chigun/issues\", query) ",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 12:41:13 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "\nrdd: org.apache.spark.rdd.RDD[(String, scala.collection.Map[String,AnyRef])] \u003d ScalaEsRDD[0] at RDD at AbstractEsRDD.scala:37\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493210322207_-1454347119",
-      "id": "20170426-123842_1919120809",
-      "dateCreated": "Apr 26, 2017 12:38:42 PM",
-      "dateStarted": "Apr 26, 2017 12:41:13 PM",
-      "dateFinished": "Apr 26, 2017 12:41:15 PM",
+      "dateStarted": "Apr 26, 2017 2:13:46 PM",
+      "dateFinished": "Apr 26, 2017 2:13:47 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -210,6 +174,111 @@
       "progressUpdateIntervalMs": 500
     },
     {
+      "text": "import scala.concurrent.Await\nimport scala.concurrent.duration._\nimport wabisabi._\nimport scala.concurrent.ExecutionContext.Implicits.global\n",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 2:09:56 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {
+          "term": "test2"
+        },
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nimport scala.concurrent.Await\n\nimport scala.concurrent.duration._\n\nimport wabisabi._\n\nimport scala.concurrent.ExecutionContext.Implicits.global\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493213254416_-1730400904",
+      "id": "20170426-132734_762500903",
+      "dateCreated": "Apr 26, 2017 1:27:34 PM",
+      "dateStarted": "Apr 26, 2017 2:09:56 PM",
+      "dateFinished": "Apr 26, 2017 2:09:58 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import scala.concurrent.duration._\nval timeout \u003d Duration(10, SECONDS)\n\nval client \u003d new Client(\"http://elasticsearch:9200\")\nval res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n\nval body \u003d Await.result(res, atMost\u003dtimeout)",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 2:19:23 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nimport scala.concurrent.duration._\n\ntimeout: scala.concurrent.duration.FiniteDuration \u003d 10 seconds\n\nclient: wabisabi.Client \u003d wabisabi.Client@4833a9aa\n\nres: scala.concurrent.Future[String] \u003d List()\nbody: String \u003d {\"took\":675,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":6,\"max_score\":6.3093243,\"hits\":[{\"_index\":\"chigun\",\"_type\":\"issues\",\"_id\":\"AVuqAOdoEUet1mo5UwKz\",\"_score\":6.3093243,\"_source\":{\"path\":\"2003_5\"},\"highlight\":{\"body\":[\" сущностных глубинах\\nбуддизма.\\n■ ЛЕТПАДКй ДйГУН\\n\u003cem style\u003d\u0027color:red;\u0027\u003eЧаньмигун\u003c/em\u003e\\nВ.Л. Асмолова *\\n«Триединство Земля-Человек\",\" Пекинского университета,\\nдоктором философии Цан Даолаем, специалистом по \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e.\\nЦигун и жизнь\",\"» (\u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e) с помощью учителя Лю Ханьвэпя,\\nобучался у монаха монастыря Силипь по имени Цы Ю\",\"    12\\nВ.Л._Асмолова.\u003cem style\u003d\u0027color:red;\u0027\u003e_Чаньмигун_\u003c/em\u003e   16\\nВан_Пэйшэн._Оздоровительные_мини-методики_(Продолжение)_   19\"..."
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493215575161_1207450276",
+      "id": "20170426-140615_75219760",
+      "dateCreated": "Apr 26, 2017 2:06:15 PM",
+      "dateStarted": "Apr 26, 2017 2:19:23 PM",
+      "dateFinished": "Apr 26, 2017 2:19:26 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Parse JSON and save paths and highlishts into HTML",
+      "user": "anonymous",
+      "dateUpdated": "Apr 26, 2017 2:45:58 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": []
+      },
+      "apps": [],
+      "jobName": "paragraph_1493215711182_-378653256",
+      "id": "20170426-140831_673207983",
+      "dateCreated": "Apr 26, 2017 2:08:31 PM",
+      "dateStarted": "Apr 26, 2017 2:45:58 PM",
+      "dateFinished": "Apr 26, 2017 2:45:59 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
       "user": "anonymous",
       "config": {},
       "settings": {
@@ -217,9 +286,9 @@
         "forms": {}
       },
       "apps": [],
-      "jobName": "paragraph_1493213254416_-1730400904",
-      "id": "20170426-132734_762500903",
-      "dateCreated": "Apr 26, 2017 1:27:34 PM",
+      "jobName": "paragraph_1493216645924_735098455",
+      "id": "20170426-142405_1684349357",
+      "dateCreated": "Apr 26, 2017 2:24:05 PM",
       "status": "READY",
       "progressUpdateIntervalMs": 500
     }
