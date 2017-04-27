@@ -77,9 +77,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n    import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val hrefBase \u003d \"http://127.0.0.1/chigun-index/resources/html\"\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {\"fragment_size\" : 1000, \"number_of_fragments\" : 10, \"fragmenter\": \"span\", \"type\":\"unified\"}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        val href \u003d s\"$hrefBase/$path.htm\"\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003d$href\u003e$path\u003c/a\u003e\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
+      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n    import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val hrefBase \u003d \"http://127.0.0.1/chigun-index/resources/html\"\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\",\n            \"operator\": \"and\",\n            \"minimum_should_match\": \"90%\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {\"fragment_size\" : 1000, \"number_of_fragments\" : 10, \"fragmenter\": \"span\", \"type\":\"unified\"}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        val href \u003d s\"$hrefBase/$path.htm\"\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003d$href\u003e$path\u003c/a\u003e\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
       "user": "anonymous",
-      "dateUpdated": "Apr 27, 2017 8:59:28 PM",
+      "dateUpdated": "Apr 27, 2017 9:28:23 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -92,7 +92,7 @@
       },
       "settings": {
         "params": {
-          "term": "синьи"
+          "term": "цигун жёлтый цветок"
         },
         "forms": {
           "term": {
@@ -109,7 +109,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "Found \u003cb\u003e41\u003c/b\u003e hits\n"
+            "data": "Found \u003cb\u003e48\u003c/b\u003e hits\n"
           },
           {
             "type": "HTML",
@@ -117,7 +117,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2002_2.htm\u003e2002_2\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1996_5.htm\u003e1996_5\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -125,7 +125,7 @@
           },
           {
             "type": "HTML",
-            "data": "Ли Хуань-чжан родился в 1925 году в уезде \u003cem style\u003d\u0027color:red;\u0027\u003eЛиньи\u003c/em\u003e провинции Шаньдун, в\nматериковом Китае; родителями его были образованные люди из служилого сословия.\n"
+            "data": "СОДЕРЖАНИЕ\nКАФЕДРА \u003cem style\u003d\u0027color:red;\u0027\u003eЦИГУН\u003c/em\u003e .\n"
           },
           {
             "type": "HTML",
@@ -133,7 +133,7 @@
           },
           {
             "type": "HTML",
-            "data": "Ли гордится тем, что множество знаменитых\nпредставителей китайской культуры были уроженцами \u003cem style\u003d\u0027color:red;\u0027\u003eЛиньи\u003c/em\u003e; самыми известными из\nего земляков являются выдающийся военный стратег древности Чжугэ Лян (181-234)\nи непревзойденный мастер каллиграфии Ван Си-чжи (321-379).\n"
+            "data": "Во-вторых, по \u003cem style\u003d\u0027color:red;\u0027\u003eцвету\u003c/em\u003e свечения можно делать выводы о способностях человека и о степени владения \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -141,7 +141,63 @@
           },
           {
             "type": "HTML",
-            "data": "В 1991 году правительственный Комитет по делам культуры присудил ему\nпремию \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e-чуань за достижения в области народного искусства —\nсамую престижную награду, которой могут удостоиться на Тайване мастера\nнародного искусства.\n"
+            "data": "Еще через некоторое\nСуществует много особых способностей высокого уровня, критерии обу�время \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e свечения меняется на розовый или оранжевый, а затем — на \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e, переходящий в золотой.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Ниже �так, что видно только белый и бледно-\u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eцвета\u003c/em\u003e.\nовладения чжунгун с целью обследования пациентов и постановки диаг«Просвечивание взглядом»\nСостояние здоровья пациента можно определять по \u003cem style\u003d\u0027color:red;\u0027\u003eцвету\u003c/em\u003e свечения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "При дальнейших тренировках образ приобретает \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Чем тяжелее заболевание, тем темнее \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e ци.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Перед входом в храм, на полу, сидят старцы, облаченные в \u003cem style\u003d\u0027color:red;\u0027\u003eжелтые\u003c/em\u003e, красные и\nголубые одеяния.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В каодаизме превалируют три \u003cem style\u003d\u0027color:red;\u0027\u003eцвета\u003c/em\u003e, и каждый имеет свою\nсимволику: \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e (буддизм, индуизм), красный (конфуцианство и христианство) и\nсиний или голубой (даосизм).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Служители с трех цветными\nповязками (\u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e, красный, голубой) на рукаве следят за порядком.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Здесь\n\u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e, пакеты с чаем, фрукты.\n"
           },
           {
             "type": "HTML",
@@ -149,7 +205,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1997_4.htm\u003e1997_4\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1999_1.htm\u003e1999_1\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -157,7 +213,7 @@
           },
           {
             "type": "HTML",
-            "data": ".||  |*|\n|||____|\u0027T_|_|\n\nЦентр ИНБИ\nС 1 по 8 ноября 1997 года в городе Орле проводит семинар по даосским внутренним\nпрактикам\nПрограмма семинара:\nДАОССКАЯ АЛХИМИ ТАЙЦЗИ (стиль Чэнь) искусство шелковой лао-цзя 1 часть\n(уровеш лао-цзя 2 часть (уровень^\nБАГУА (стиль Лян)\nнахождение Цянь и Кунь (первые восемь форм) движение Кань и Ли (вторые восемь\nформ) четыре превращения Тайи 16 движений по прямой (четыре линии Ицзина)\n\u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e\nформы «пяти первоэлементов»\nТУЙШОУ\nпарная форма\nТАЙЦЗИ-МЯЧ\nплетение шелковой нити форма с мячом (стиль Чэнь)\n(размер мяча — баскетбольный для мужчин — темный цвет, для женщин — светлый)\nТАЙЦЗИ-ВЕЕР\nПродолжительность занятий не менее 8 часов в день.\n"
+            "data": "Основные принципы “космического \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e”\n^Инь Гуан\n“Космический \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e” — традиционный вид \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e-терапии, разрабатывавшийся\nучителем Гао Яньцзе на протяжении 20 лет на основе классических методик \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -165,7 +221,71 @@
           },
           {
             "type": "HTML",
-            "data": "Голос корейца вывел меня из размышлений.\n-    Привычку Мудрой \u003cem style\u003d\u0027color:red;\u0027\u003eСвиньи\u003c/em\u003e ставить ноги в еду можно трактовать и\nболее глубоко.\n"
+            "data": "Для живописца было бы\nнепростительно не изобразить подобный \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Помимо этого зрительного удовольствия, после того, как\nопадут все лепестки с \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e, считающиеся деликатесами зерна лотоса и его корни\nдоставят человеку немалое вкусовое наслаждение\nЛотос известен в Китае как \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e хэ и как \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e лянъ.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Затем, спустя три-пять дней, все лепестки у \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e\nопадают.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Существует\nеще \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e лотос (Nelumbo lutea), распространенный только в Северной и\nЦентральной Америке.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "На суше \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e дикой сливы мэйхуа соперничает в красоте с орхидеей, а персик —\nсо сливой.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Считать его \u003cem style\u003d\u0027color:red;\u0027\u003eцветком\u003c/em\u003e?\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Однако лотос\nгораздо полезнее, чем обычный \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e, который после краткого цветения увядает.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Североамериканский \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e лотос считается “полудиким”.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В мрачном мире прошлого предок лотоса был\nпервым, кто привнес в него \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -173,7 +293,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1993-3.htm\u003e1993-3\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1993-2.htm\u003e1993-2\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -181,7 +301,7 @@
           },
           {
             "type": "HTML",
-            "data": ".);\n—    \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e («мыслеформы») порождаются сочетанием 64 гуа и образуют многообразие\nформ реальной жизни.\n"
+            "data": "Учение об у син и \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e 10\nМетодики \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e Мо Вэньдань.\n"
           },
           {
             "type": "HTML",
@@ -189,7 +309,7 @@
           },
           {
             "type": "HTML",
-            "data": "Бесчисленное множество и многообразие форм реальной жизни Гу дао (Корень\nдао) «Застава вэйлюй», «Золотая печь», \u003cem style\u003d\u0027color:red;\u0027\u003eСинъи\u003c/em\u003e\n1.\n"
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e\nстремительно развивался.\n"
           },
           {
             "type": "HTML",
@@ -197,7 +317,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eСинъи\u003c/em\u003e («мыслеформы») — это багуа тела, не имеющего формы.\n"
+            "data": "Основные принципы \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e\nПервый принцип \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e — беречь себя, второй — быть нравственным.\n"
           },
           {
             "type": "HTML",
@@ -205,7 +325,7 @@
           },
           {
             "type": "HTML",
-            "data": "Знаменитый мастер воинских искусств Сунь Лутан дает следующую характеристику\nэтой системы: «...тайцзи содержит Великую Пустоту, багуа — диалектику\nизменений, \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e — правильный удар.\n"
+            "data": "Воистину, на свете есть и травы, не дающие \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e, и \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e, не дающие плодов!\n"
           },
           {
             "type": "HTML",
@@ -213,7 +333,47 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eСинъи\u003c/em\u003e применяется против сильного соперника, но недопустимо против\nслабого.\n"
+            "data": "Методика упражнений с применением метода «шести иероглифов»\n\u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e лица, бледный язык, скудные менструации, прекращение менструаци�1.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Круг окружен 12\nлепестками кирпично-красного \u003cem style\u003d\u0027color:red;\u0027\u003eцвета\u003c/em\u003e (см. рис. 3).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Квадрат ориентирован по\nсторонам света и связан к тому же с соответствующим \u003cem style\u003d\u0027color:red;\u0027\u003eцветом\u003c/em\u003e примыкающего изнутри\nпространства квадрата, где:\n—    ВОСТОК (земля — символ «квадрат») — белый \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e;\n—    ЮГ (вода — символ «круг») — \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e;\n—    ЗАПАД (огонь 1 — символ «треугольник») — красный \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e;\n—    СЕВЕР (воздух — символ «полукруг») — зеленый \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e;\n—    ЦЕНТР (символ «точка») — синий (акаша) и черный (огонь 2)\n\u003cem style\u003d\u0027color:red;\u0027\u003eцвета\u003c/em\u003e. \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Белый \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e и положение рук\n(мудра) активизируют меридиан «сердце». \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Соответствует:\n—    элементу «вода» (\u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e — \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e);\n—    направлению на юг;\n—    меридианам «три части туловища» и «желчный пузырь»;\n—    энергии «тамас»;\n—    символу «овца» (гордыня);\n—    свадхистхана-чакре (половой центр).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЖелтый\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e усиливает меридиан «желчный пузырь», а положение рук активизирует\nмеридианы «желчный пузырь» и «три части туловища». \n"
           },
           {
             "type": "HTML",
@@ -221,7 +381,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1991_3.htm\u003e1991_3\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1996_1.htm\u003e1996_1\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -229,7 +389,7 @@
           },
           {
             "type": "HTML",
-            "data": "К нем�юноше каждый день практиковать саньтиши для овладения «кулаком» \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\n"
+            "data": "То же и в \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -237,7 +397,7 @@
           },
           {
             "type": "HTML",
-            "data": "Как говорится, терпение и\nсаньтиши — это основа гимнастики \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\n"
+            "data": "При избытке\nхолода больше есть сладких \u003cem style\u003d\u0027color:red;\u0027\u003eжелтых\u003c/em\u003e яблок (кислое яблоко будет работать, как\nветер).\n"
           },
           {
             "type": "HTML",
@@ -245,7 +405,7 @@
           },
           {
             "type": "HTML",
-            "data": "Тело его стало как будто вылитым иЕще через три года Ци Гунбо стал известным на севере страны мастером \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\nдостиг этого, Гунбо, ты овладел мастерством», — сказал он.\n"
+            "data": "Торможение оказывают \u003cem style\u003d\u0027color:red;\u0027\u003eцветом\u003c/em\u003e подчиняющей категории: для\nторможения ветра берут белый \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e, для торможения тепла и жара — черный,\nвлажности — зеленый, сухости — красный, холода — \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -253,7 +413,7 @@
           },
           {
             "type": "HTML",
-            "data": "Сунь Лутан был назначен руководителем государственной школы ушу провинции Цзянсу.\nулыбаясь, сказал: «За три года я только и научился, что «стоУ него было много учеников, но учитель взял с собой только Ци Гунбо и назначил его на должность\nблестящими от волнениями глазами ответил: «Три года не протренера гимнастики \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\nтрудным и теперь быстро освоишь \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e. \n"
+            "data": "На эмоциональном\nуровне гнев тормозится белым \u003cem style\u003d\u0027color:red;\u0027\u003eцветом\u003c/em\u003e, радость и счастье — черным, тревога —\nзеленым илй синим, печаль — красным и страх — \u003cem style\u003d\u0027color:red;\u0027\u003eжелтым\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -261,7 +421,7 @@
           },
           {
             "type": "HTML",
-            "data": "Ручаюсь, что через пС тех пор популярность его постоянно росла, и скоро он стал известен как большой мастер \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e\nмладших, и старших».\n"
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЖелтый\u003c/em\u003e относится к стихии земли.\n"
           },
           {
             "type": "HTML",
@@ -269,7 +429,39 @@
           },
           {
             "type": "HTML",
-            "data": "Применялись также\nсоломенные, деревянные, каменные, керамические мячи и мячи, представлявшие собой надутый воздухом мочевой пузырь \u003cem style\u003d\u0027color:red;\u0027\u003eсвиньи\u003c/em\u003e. \n"
+            "data": "В\nнегативном смысле \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e обозначает обман, предательство, измену (Иуда\nвсегда изображался в желтом хитоне).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЖелтым\u003c/em\u003e окрашена чакра Манипура, связанная с солнечным сплетением.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЖелтый\u003c/em\u003e\nувеличивает частоту дыхания и пульса, повышает давление в манере, сходной с\nкрасным.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В лечебных целях \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e используется для очищающего воздействия на весь\nорганизм.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Тонизацией \u003cem style\u003d\u0027color:red;\u0027\u003eжелтым\u003c/em\u003e лечатся бессонница,\nвялое пищеварение, атонические запоры.\n"
           },
           {
             "type": "HTML",
@@ -277,7 +469,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1992_1.htm\u003e1992_1\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2003_3.htm\u003e2003_3\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -285,7 +477,7 @@
           },
           {
             "type": "HTML",
-            "data": "Иероглиф «син», обозначающий «человеческую природу», составлен из двух частей:\n«сердце» или «ум» (\u003cem style\u003d\u0027color:red;\u0027\u003eсинь\u003c/em\u003e) и «рождаться» (шен).\n"
+            "data": "СОДЕРЖАНИЕ\nКАФЕДРА \u003cem style\u003d\u0027color:red;\u0027\u003eЦИГУН\u003c/em\u003e\nНань_Хуайцзинь.\n"
           },
           {
             "type": "HTML",
@@ -293,7 +485,7 @@
           },
           {
             "type": "HTML",
-            "data": "Сердце (\u003cem style\u003d\u0027color:red;\u0027\u003eсинь\u003c/em\u003e) в соответствии с\nкитайскими понятиями есть вместилище эмоциального сознания, которое\nпробуждается пятью чувствами, контролируемыми\nреакциями на восприятие внешнего мира.\n"
+            "data": "Все сущее в этом\nмире - травы, \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e и деревья, птицы п звери - имеет теснейшую взаимосвязь\nс существованием человека.\n"
           },
           {
             "type": "HTML",
@@ -301,7 +493,7 @@
           },
           {
             "type": "HTML",
-            "data": "Вера \u003cem style\u003d\u0027color:red;\u0027\u003eСинхи\u003c/em\u003e в Благословенного усилилась.\n"
+            "data": "Одновременно с укреплением своих сил\nмастер \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e во время сеанса \u003cem style\u003d\u0027color:red;\u0027\u003eцпгун\u003c/em\u003e-тераннн укрепляет и «силу мысли».\n"
           },
           {
             "type": "HTML",
@@ -309,7 +501,55 @@
           },
           {
             "type": "HTML",
-            "data": "И сердце \u003cem style\u003d\u0027color:red;\u0027\u003eСинхи\u003c/em\u003e преисполнилось радостью.\n"
+            "data": "Впереди у тебя большое будущее, освещенное \u003cem style\u003d\u0027color:red;\u0027\u003eСветом\u003c/em\u003e\nГосподним.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦвет\u003c/em\u003e лица является внешним проявлением состояния цп н крови\n«пяти плотных органов».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В трактате «Сувэнь» говорится: «У кого ясное семя и\nпять \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e, у того цп процветает».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Арбузы имеют много сортов: черные, зеленые, белые; с \u003cem style\u003d\u0027color:red;\u0027\u003eжелтой\u003c/em\u003e,\nкрасной и белой мякотыо.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "На воде рядом с домом \u003cem style\u003d\u0027color:red;\u0027\u003eцветут\u003c/em\u003e лотосы, чуть дальше —\nзаросли камыша.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Лягушек ловили только зеленых, серо-\u003cem style\u003d\u0027color:red;\u0027\u003eжелтых\u003c/em\u003e не брали.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Скорпионы бывают трех видов: большие зеленые, темно-синие и маленькие \u003cem style\u003d\u0027color:red;\u0027\u003eжелтые\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -317,7 +557,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1998_5.htm\u003e1998_5\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2003_4.htm\u003e2003_4\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -325,7 +565,7 @@
           },
           {
             "type": "HTML",
-            "data": "Современные мастера цигун Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e, Ван Липин и\nдругие прида-\u0027 ют голоданию большое значение, не только практикуя его сами, но\nи настоятельно призывают к этому своих учеников Согласно преданиям, некоторые\nмастера цигун древности смогли полностью отказаться от еды В йоге голодание с\nцелью очищения организма от шлаков также зачастую считается основополагающей\nпрактикой.\n"
+            "data": "\"\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e и жизнь\", 2003, № 4\nКомпьютерная верстка А.\n"
           },
           {
             "type": "HTML",
@@ -333,7 +573,71 @@
           },
           {
             "type": "HTML",
-            "data": "Учитель Янь\n\u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e говорит, что учиться надо у всего, что тебя окружает.\n"
+            "data": "Что такое «\u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e»?\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Все слышали, что \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e способен лечить болезни.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "На чем же основывается\nподлинный \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e?\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Как соотносятся \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e и болезнь\nИсходя из соответствия «пяти первоэлементов» и различных \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e спектра,\nсостояние больного, в принципе, можно определить даже по одному только его\n\u003cem style\u003d\u0027color:red;\u0027\u003eцвету\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "При нездоровом сердце изменяется \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e лба,\nбольные почки влияют на \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e щек.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Кроме изучения \u003cem style\u003d\u0027color:red;\u0027\u003eцвета\u003c/em\u003e лица, в китайской медицине еще смотрят на \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e налета на\nязыке, на любые другие признаки, которые определяются визуально.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Жизнь никогда не \u003cem style\u003d\u0027color:red;\u0027\u003eцветет\u003c/em\u003e в защищенности; она\n\u003cem style\u003d\u0027color:red;\u0027\u003eцветет\u003c/em\u003e только в незащищенности.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Вся грудь\nсильно уплотнилась, стала болеть, а справа снизу начались \u003cem style\u003d\u0027color:red;\u0027\u003eжелтые\u003c/em\u003e выделения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Там нежные \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e,\nтам черный буйвол дремлет.\n"
           },
           {
             "type": "HTML",
@@ -341,7 +645,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1991_1.htm\u003e1991_1\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1998_3.htm\u003e1998_3\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -349,7 +653,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e — живая легенда (Рассказ о мастере цигун) 48 Минь\nКэ.\n"
+            "data": "Вот\nпочему луна, солнце, \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e лотоса используются в самых разных методиках.\n"
           },
           {
             "type": "HTML",
@@ -357,7 +661,7 @@
           },
           {
             "type": "HTML",
-            "data": "К счастью, свидетелем этого случайно оказался Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e.\n"
+            "data": "Например, вы представляете розовый \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e лотоса в области нижнего даньтяня\n\u003cem style\u003d\u0027color:red;\u0027\u003eЩеток\u003c/em\u003e раскрывается...\n"
           },
           {
             "type": "HTML",
@@ -365,7 +669,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e молча стоял напротив Ли Пина.\n"
+            "data": "Признаками «жизни после смерти»\nсчитались следующие проявления: тело усопшего на разлагалось, не источало\nзапаха, его лицо уподоблялось \u003cem style\u003d\u0027color:red;\u0027\u003eцветку\u003c/em\u003e персика, кожа приобретала \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e яшмы.\n"
           },
           {
             "type": "HTML",
@@ -373,7 +677,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e закончил сеанс и ушел к другим больным.\n"
+            "data": "Например, только кварц бывает фиолетового,\nкрасного и белого \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -381,7 +685,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e угадал его мысль: «Не бойтесь, считайте, что перелома не\nбыло».\n"
+            "data": "В древние времена их называли «\u003cem style\u003d\u0027color:red;\u0027\u003eсветом\u003c/em\u003e естества», «\u003cem style\u003d\u0027color:red;\u0027\u003eсветом\u003c/em\u003e\nмудрости», «волшебным \u003cem style\u003d\u0027color:red;\u0027\u003eсветом\u003c/em\u003e», «\u003cem style\u003d\u0027color:red;\u0027\u003eсветом\u003c/em\u003e ян», а сейчас «излучением головного\nмозга», «биоэлектричеством» и т.д.\n"
           },
           {
             "type": "HTML",
@@ -389,7 +693,7 @@
           },
           {
             "type": "HTML",
-            "data": "— приказал ему Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e, как командир солдату. —\nЧто вы боитесь?\n"
+            "data": "Некоторые\nначинают слышать какие-то звуки, ощущать запахи \u003cem style\u003d\u0027color:red;\u0027\u003eцветов\u003c/em\u003e, видеть тексты.\n"
           },
           {
             "type": "HTML",
@@ -397,7 +701,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e воздействует на переломы прежде всего излучением ци.\n"
+            "data": "Какова же была наша радость, когда она сообщила, что там действительно есть эти\n\u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -405,7 +709,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e обеими\nруками прижал место перелома.\n"
+            "data": "Почти все \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e с их помощью привлекают насекомых.\n"
           },
           {
             "type": "HTML",
@@ -413,7 +717,7 @@
           },
           {
             "type": "HTML",
-            "data": "С еще более сложным случаем Янь\n\u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e имел дело в июле 1985 года.\n"
+            "data": "Затем\nпоочередно вызывайте мысленные образы изумрудной печени, красного сердца,\n\u003cem style\u003d\u0027color:red;\u0027\u003eжелтой\u003c/em\u003e селезенки, белых легких и черных почек, не спеша отсчитывая по\n36 пульсирующих движений каждого из органов.\n6.    \n"
           },
           {
             "type": "HTML",
@@ -421,7 +725,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e — живая легенда\nО перечисленных в статье стилях ушу см.: Маслов А.\n"
+            "data": "Тайбэй, изображенный\nв этом фильме, представал как город, заново отстроенный после разрушительной\nвойны, — с новыми жилыми домами, уныло стоящими на участках \u003cem style\u003d\u0027color:red;\u0027\u003eжелтой\u003c/em\u003e земли и\nсерого цемента.\n"
           },
           {
             "type": "HTML",
@@ -429,7 +733,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1998_4.htm\u003e1998_4\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2000_6.htm\u003e2000_6\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -437,7 +741,7 @@
           },
           {
             "type": "HTML",
-            "data": "Три случая излечения астмы с помощью цигун 36\nХу Цзяянь, Ху Цзинсун, Лю \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e.\n"
+            "data": "СОДЕРЖАНИЕ\nКАФЕДРА \u003cem style\u003d\u0027color:red;\u0027\u003eЦИГУН\u003c/em\u003e\nЯн_Гоань.\n"
           },
           {
             "type": "HTML",
@@ -445,7 +749,71 @@
           },
           {
             "type": "HTML",
-            "data": "Сергеева\nОпыт применения “мысленной акупунктуры” в клинической практике\nХу Цзяянь, Ху Цзинсун, Лю \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nСоставной частью терапевтической методики учителя Лю Шаобиня “небесная\nколонна”2 является цигун-акупунктура, представляющая собой воздействие на\nбиологически активные точки в лечебных целях с помощью “внешней ци” посредством\nпридания ей иглоподобной формы.\n"
+            "data": "Эту окружность также называют кругом, или эклиптикой (\u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e путь).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e высокого уровня\nХай Мин\n\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e высокого уровня — это совсем не то, что обычно понимается под занятиями\n\u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Мысленно поместите этот образ на \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e лотоса.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Болезни печени и головные боли\n\u003cem style\u003d\u0027color:red;\u0027\u003eЦветы\u003c/em\u003e розы — 4-5 шт., \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e бобов конских — 9-12 г.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Приготовить отвар и принимать один раз в день.\n3)    \u003cem style\u003d\u0027color:red;\u0027\u003eЦветы\u003c/em\u003e розы — 6 г, пустырник — 30 г, \u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e сахарный песок — 15 г.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Можно есть по достижении светло-\nрумяного \u003cem style\u003d\u0027color:red;\u0027\u003eцвета\u003c/em\u003e\n9.    \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Принимать после еды.\n2)    \u003cem style\u003d\u0027color:red;\u0027\u003eЦветы\u003c/em\u003e розы — 7 шт., сирень — 7 \u003cem style\u003d\u0027color:red;\u0027\u003eцветков\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Возникший в бассейне \u003cem style\u003d\u0027color:red;\u0027\u003eЖелтой\u003c/em\u003e реки, он приходился на период,\nкогда там появлялись первые, иногда еще припорошенные снегом, \u003cem style\u003d\u0027color:red;\u0027\u003eцветы\u003c/em\u003e на сливе\nмэйхуа.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "КАФЕДРА \u003cem style\u003d\u0027color:red;\u0027\u003eЦИГУН\u003c/em\u003e\nФэнЛида.\n"
           },
           {
             "type": "HTML",
@@ -453,7 +821,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1997_3.htm\u003e1997_3\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2001_1.htm\u003e2001_1\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -461,7 +829,7 @@
           },
           {
             "type": "HTML",
-            "data": "Вавилова, 31, корп. 1\nЖурнал отпечатан в типографии ИЧП \"Шанс\"\nI МАСТЕРА ЦЙТYtf\n\n\nI\n\nМастер цигун Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nКэ Юньлу\nЯнь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e является наиболее известным в настоящее время мастером цигун.\n"
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eСваток\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -469,7 +837,7 @@
           },
           {
             "type": "HTML",
-            "data": "Мастер Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nвоздействовал на раствор, находясь на расстоянии 10 км от него.\n"
+            "data": "\"\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e и жизнь\", 2001, № 1\nКомпьютерная верстка А.\n"
           },
           {
             "type": "HTML",
@@ -477,7 +845,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e Да, это так.\n"
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e и магия — разные вещи.\n"
           },
           {
             "type": "HTML",
@@ -485,7 +853,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Все, что вы сказали, верно.\n"
+            "data": "«Особые способности» целью \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e не являются.\n"
           },
           {
             "type": "HTML",
@@ -493,7 +861,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Сразу трудно ответить.\n"
+            "data": "Из пупка вырастите\nросточек, сначала дающий бутон, а затем распускающийся в \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -501,7 +869,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Можно сказать и так, но не бывает, чтобы я вообще не имел понятия о\nкакой-либо из своих способностей.\n"
+            "data": "При завершении упражнения\nсоберите ци — \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e в нижнем даньтяне.\n"
           },
           {
             "type": "HTML",
@@ -509,7 +877,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: И отдельно, и вместе.\n"
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e во сне\nВыполняется перед сном, лежа в кровати.\n"
           },
           {
             "type": "HTML",
@@ -517,7 +885,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: В определенной степени можно понимать и так.\n"
+            "data": "Это\nособенно касается тех, кто занимается \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -525,7 +893,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Совершенно верно\nМастера цигун и дети с особыми способностями\nЯнь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e является мастером цигун высокого уровня, и его постоянно окружают\nдети, обладающие теми или иными особыми способностями.\n"
+            "data": "До 1751 г. средний ярус имел\n\u003cem style\u003d\u0027color:red;\u0027\u003eжелтый\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e (символ земли), а нижний — зеленый \u003cem style\u003d\u0027color:red;\u0027\u003eцвет\u003c/em\u003e (символ воды).\n"
           },
           {
             "type": "HTML",
@@ -533,7 +901,7 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e ответил: «Конечно, нет.\n"
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦветы\u003c/em\u003e появляются весной\n— «чунь».\n"
           },
           {
             "type": "HTML",
@@ -541,7 +909,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1993-1.htm\u003e1993-1\u003c/a\u003e\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1992_5.htm\u003e1992_5\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -549,7 +917,7 @@
           },
           {
             "type": "HTML",
-            "data": "Все полученные письма будут направлены в ее\nадрес.\n4\nЯ стремлюсь утвердить истинное понимание цигун Систематизированное\nизложение цигун-доклада Янь Синя\nЯнь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e родился в 1950 г. в провинции Сычуань, закончил институт традиционной\nкитайской медицины в г.\n"
+            "data": "Великие мастера \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e (Роман.\n"
           },
           {
             "type": "HTML",
@@ -557,7 +925,71 @@
           },
           {
             "type": "HTML",
-            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nявляется самым авторитетным мастером цигун в Китае.\n"
+            "data": "У истоков \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e\nТайна Золотого \u003cem style\u003d\u0027color:red;\u0027\u003eЦветка\u003c/em\u003e\nКитайская книга жизни\n(Перевод и комментарии Р.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Следовательно, Путь Золотого \u003cem style\u003d\u0027color:red;\u0027\u003eЦветка\u003c/em\u003e зависит\nцеликом от метода обратно текущего движения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЦветок\u003c/em\u003e света небес и земли\nнаполняет тысячу пространств.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Но также \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e света отдельного тела проходит\nчерез небеса и покрывает землю. \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Они также не имели в виду, что, пока глаза смотрят на кончик\nноса, мысли должны быть сосредоточены на \u003cem style\u003d\u0027color:red;\u0027\u003eжелтой\u003c/em\u003e середине.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Даосизм называет это \u003cem style\u003d\u0027color:red;\u0027\u003eжелтой\u003c/em\u003e\nсерединой, буддизм — центром середины состояния.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Наиболее почитаемый \u003cem style\u003d\u0027color:red;\u0027\u003eцветок\u003c/em\u003e Индии — 8-лепестковый лотос.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "«Принципы \u003cem style\u003d\u0027color:red;\u0027\u003eцигун\u003c/em\u003e». \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Заполнение месячных \u003cem style\u003d\u0027color:red;\u0027\u003eклеток\u003c/em\u003e при переадресовании издания, а также клетки\n«ПВ—МЕСТО» производится работниками предприятий связи и Союзпечати,\n«\u003cem style\u003d\u0027color:red;\u0027\u003eЦигун\u003c/em\u003e и спорт», 1992, № 5, 64 с.\n"
           }
         ]
       },
@@ -565,8 +997,8 @@
       "jobName": "paragraph_1493215711182_-378653256",
       "id": "20170426-140831_673207983",
       "dateCreated": "Apr 26, 2017 2:08:31 PM",
-      "dateStarted": "Apr 27, 2017 8:59:28 PM",
-      "dateFinished": "Apr 27, 2017 8:59:29 PM",
+      "dateStarted": "Apr 27, 2017 9:28:23 PM",
+      "dateFinished": "Apr 27, 2017 9:28:24 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -604,7 +1036,130 @@
     "2CDUS3ZN7:shared_process": [],
     "2CF4RQWRK:shared_process": [],
     "2CG87DAGU:shared_process": [],
-    "2CGCJXQ5U:shared_process": [],
+    "2CGCJXQ5U:shared_process": [
+      {
+        "name": "search_20170427_211714_806483006",
+        "object": [
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUM5yxSobqRSl8L7",
+            "source": "{\"path\":\"2003_5\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUxmyxSobqRSl8MQ",
+            "source": "{\"path\":\"1992_5\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTU6FyxSobqRSl8MZ",
+            "source": "{\"path\":\"2003_6\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTVITyxSobqRSl8Ml",
+            "source": "{\"path\":\"1995_1\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTVIUyxSobqRSl8Mm",
+            "source": "{\"path\":\"1994_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTVf-yxSobqRSl8M3",
+            "source": "{\"path\":\"1993-3\"}"
+          }
+        ]
+      },
+      {
+        "name": "search_20170427_123313_865413329",
+        "object": [
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUygyxSobqRSl8MV",
+            "source": "{\"path\":\"1993-4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUaEyxSobqRSl8MA",
+            "source": "{\"path\":\"2001_5-6\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUM5yxSobqRSl8L6",
+            "source": "{\"path\":\"2002_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTVmXyxSobqRSl8M_",
+            "source": "{\"path\":\"1991_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTVITyxSobqRSl8Mk",
+            "source": "{\"path\":\"1991_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUrRyxSobqRSl8MO",
+            "source": "{\"path\":\"1999_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUHQyxSobqRSl8L4",
+            "source": "{\"path\":\"2002_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUygyxSobqRSl8MT",
+            "source": "{\"path\":\"1991_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTUjPyxSobqRSl8ME",
+            "source": "{\"path\":\"2001_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuvTVgCyxSobqRSl8M4",
+            "source": "{\"path\":\"2003_2\"}"
+          }
+        ]
+      }
+    ],
     "2CF85ZWM9:shared_process": [],
     "2CFFX1KZW:shared_process": []
   },
