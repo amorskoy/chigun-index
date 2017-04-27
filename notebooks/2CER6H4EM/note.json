@@ -3,7 +3,7 @@
     {
       "text": "    import org.elasticsearch.spark._ \n    spark.conf.set(\"es.index.auto.create\", \"true\")\n    val base \u003d \"/resources/txt\"",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 11:12:29 AM",
+      "dateUpdated": "Apr 27, 2017 12:04:40 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -31,15 +31,15 @@
       "jobName": "paragraph_1493196941368_-1554354555",
       "id": "20170426-085541_1052140687",
       "dateCreated": "Apr 26, 2017 8:55:41 AM",
-      "dateStarted": "Apr 26, 2017 11:12:29 AM",
-      "dateFinished": "Apr 26, 2017 11:13:03 AM",
+      "dateStarted": "Apr 27, 2017 12:04:40 PM",
+      "dateFinished": "Apr 27, 2017 12:04:41 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "val files \u003d sc.wholeTextFiles(s\"$base/*\")",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 11:13:33 AM",
+      "dateUpdated": "Apr 27, 2017 12:05:06 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -59,7 +59,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\nfiles: org.apache.spark.rdd.RDD[(String, String)] \u003d /resources/txt/* MapPartitionsRDD[1] at wholeTextFiles at \u003cconsole\u003e:32\n"
+            "data": "\nfiles: org.apache.spark.rdd.RDD[(String, String)] \u003d /resources/txt/* MapPartitionsRDD[3] at wholeTextFiles at \u003cconsole\u003e:46\n"
           }
         ]
       },
@@ -67,15 +67,15 @@
       "jobName": "paragraph_1493196965551_537955936",
       "id": "20170426-085605_952256959",
       "dateCreated": "Apr 26, 2017 8:56:05 AM",
-      "dateStarted": "Apr 26, 2017 11:13:33 AM",
-      "dateFinished": "Apr 26, 2017 11:13:36 AM",
+      "dateStarted": "Apr 27, 2017 12:05:06 PM",
+      "dateFinished": "Apr 27, 2017 12:05:06 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "case class EsDoc(path: String, body: String)\nval processed \u003d files.map(s\u003d\u003e(s._1.split(\"/\").takeRight(1)(0).replace(\".htm.txt\",\"\"), s._2)).map(s \u003d\u003e EsDoc(s._1, s._2))",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 11:23:25 AM",
+      "dateUpdated": "Apr 27, 2017 12:05:18 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -95,7 +95,7 @@
         "msg": [
           {
             "type": "TEXT",
-            "data": "\ndefined class EsDoc\n\nprocessed: org.apache.spark.rdd.RDD[EsDoc] \u003d MapPartitionsRDD[6] at map at \u003cconsole\u003e:36\n"
+            "data": "\ndefined class EsDoc\n\nprocessed: org.apache.spark.rdd.RDD[EsDoc] \u003d MapPartitionsRDD[5] at map at \u003cconsole\u003e:50\n"
           }
         ]
       },
@@ -103,15 +103,15 @@
       "jobName": "paragraph_1493197670000_1683920930",
       "id": "20170426-090750_334048111",
       "dateCreated": "Apr 26, 2017 9:07:50 AM",
-      "dateStarted": "Apr 26, 2017 11:23:25 AM",
-      "dateFinished": "Apr 26, 2017 11:23:26 AM",
+      "dateStarted": "Apr 27, 2017 12:05:18 PM",
+      "dateFinished": "Apr 27, 2017 12:05:20 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "text": "processed.saveToEs(\"chigun/issues\")",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 11:23:54 AM",
+      "dateUpdated": "Apr 27, 2017 12:05:25 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -134,8 +134,8 @@
       "jobName": "paragraph_1493197853088_66130070",
       "id": "20170426-091053_1878274955",
       "dateCreated": "Apr 26, 2017 9:10:53 AM",
-      "dateStarted": "Apr 26, 2017 11:23:54 AM",
-      "dateFinished": "Apr 26, 2017 11:24:03 AM",
+      "dateStarted": "Apr 27, 2017 12:05:25 PM",
+      "dateFinished": "Apr 27, 2017 12:05:34 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -157,15 +157,15 @@
   "name": "Save TXT to ElasticSearch",
   "id": "2CER6H4EM",
   "angularObjects": {
-    "2CH8PPFVZ:shared_process": [],
-    "2CFRQ9SMH:shared_process": [],
-    "2CHE54C2S:shared_process": [],
-    "2CEYR2FT7:shared_process": [],
-    "2CE8AUWHE:shared_process": [],
-    "2CE19C2AQ:shared_process": [],
-    "2CDQDZX1W:shared_process": [],
-    "2CE85U3XY:shared_process": [],
-    "2CGZ7KJNA:shared_process": []
+    "2CEN1WWVS:shared_process": [],
+    "2CH8N6H83:shared_process": [],
+    "2CFDV17ZA:shared_process": [],
+    "2CDUS3ZN7:shared_process": [],
+    "2CF4RQWRK:shared_process": [],
+    "2CG87DAGU:shared_process": [],
+    "2CGCJXQ5U:shared_process": [],
+    "2CF85ZWM9:shared_process": [],
+    "2CFFX1KZW:shared_process": []
   },
   "config": {},
   "info": {}

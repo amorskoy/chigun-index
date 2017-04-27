@@ -1,81 +1,9 @@
 {
   "paragraphs": [
     {
-      "text": "%spark.dep\nz.load(\"com.github.gphat:wabisabi_2.11:2.2.0\")",
+      "text": "%spark.dep\nz.load(\"com.github.gphat:wabisabi_2.11:2.2.0\")\nz.load(\"net.liftweb:lift-json_2.11:3.0.1\")",
       "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 2:03:27 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "res0: org.apache.zeppelin.dep.Dependency \u003d org.apache.zeppelin.dep.Dependency@26ed0bdd\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493215170711_-918249647",
-      "id": "20170426-135930_923398002",
-      "dateCreated": "Apr 26, 2017 1:59:30 PM",
-      "dateStarted": "Apr 26, 2017 2:03:27 PM",
-      "dateFinished": "Apr 26, 2017 2:03:56 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "import org.elasticsearch.spark._",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 2:04:29 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
-          {
-            "type": "TEXT",
-            "data": "\nimport org.elasticsearch.spark._\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493210003352_-2122531720",
-      "id": "20170426-123323_1206961085",
-      "dateCreated": "Apr 26, 2017 12:33:23 PM",
-      "dateStarted": "Apr 26, 2017 2:04:29 PM",
-      "dateFinished": "Apr 26, 2017 2:04:43 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "val query \u003d s\"\"\" {\n  \\\"_source\\\" : [\\\"path\\\"],\n  \\\"query\\\" : {\n    \\\"fuzzy\\\" : {\n      \\\"body\\\" : {\n        \\\"value\\\" : \\\"${z.input(\"term\")}\\\",\n        \\\"boost\\\" : 1.0\n      }\n    }\n  },\n\n \\\"highlight\\\" : {\n        \\\"pre_tags\\\" : [\\\"\u003cem style\u003d\u0027color:red;\u0027\u003e\\\"],\n        \\\"post_tags\\\" : [\\\"\u003c/em\u003e\\\"],\n        \\\"fields\\\" : {\n            \\\"body\\\" : {}\n        }\n    }\n}\n\"\"\"",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 2:45:38 PM",
+      "dateUpdated": "Apr 27, 2017 2:20:12 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -85,12 +13,86 @@
           "editOnDblClick": false
         },
         "editorMode": "ace/mode/scala",
-        "tableHide": true,
-        "editorHide": false
+        "tableHide": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res0: org.apache.zeppelin.dep.Dependency \u003d org.apache.zeppelin.dep.Dependency@2c595d23\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493215170711_-918249647",
+      "id": "20170426-135930_923398002",
+      "dateCreated": "Apr 26, 2017 1:59:30 PM",
+      "dateStarted": "Apr 27, 2017 2:20:12 PM",
+      "dateFinished": "Apr 27, 2017 2:20:20 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import scala.concurrent.Await\nimport scala.concurrent.duration._\nimport wabisabi._\nimport scala.concurrent.ExecutionContext.Implicits.global\nimport net.liftweb.json.DefaultFormats\nimport net.liftweb.json._\nimport net.liftweb.json.JsonDSL._\n",
+      "user": "anonymous",
+      "dateUpdated": "Apr 27, 2017 2:20:25 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala",
+        "tableHide": true
       },
       "settings": {
         "params": {
-          "term": "чаньмигун"
+          "term": "test2"
+        },
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nimport scala.concurrent.Await\n\nimport scala.concurrent.duration._\n\nimport wabisabi._\n\nimport scala.concurrent.ExecutionContext.Implicits.global\n\nimport net.liftweb.json.DefaultFormats\n\nimport net.liftweb.json._\n\nimport net.liftweb.json.JsonDSL._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493213254416_-1730400904",
+      "id": "20170426-132734_762500903",
+      "dateCreated": "Apr 26, 2017 1:27:34 PM",
+      "dateStarted": "Apr 27, 2017 2:20:25 PM",
+      "dateFinished": "Apr 27, 2017 2:20:35 PM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n        import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e$path\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
+      "user": "anonymous",
+      "dateUpdated": "Apr 27, 2017 2:21:28 PM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/scala"
+      },
+      "settings": {
+        "params": {
+          "term": "ЧАНЬМИГУН"
         },
         "forms": {
           "term": {
@@ -106,181 +108,161 @@
         "code": "SUCCESS",
         "msg": [
           {
-            "type": "TEXT",
-            "data": "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nquery: String \u003d\n\" {\n  \"_source\" : [\"path\"],\n  \"query\" : {\n    \"fuzzy\" : {\n      \"body\" : {\n        \"value\" : \"чаньмигун\",\n        \"boost\" : 1.0\n      }\n    }\n  },\n\n \"highlight\" : {\n        \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n        \"post_tags\" : [\"\u003c/em\u003e\"],\n        \"fields\" : {\n            \"body\" : {}\n        }\n    }\n}\n\"\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493210141646_-1726793668",
-      "id": "20170426-123541_72611410",
-      "dateCreated": "Apr 26, 2017 12:35:41 PM",
-      "dateStarted": "Apr 26, 2017 2:13:46 PM",
-      "dateFinished": "Apr 26, 2017 2:13:47 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "%elasticsearch\nsearch /chigun/issues {\n  \"_source\" : [\"path\"],\n  \"query\" : {\n    \"fuzzy\" : {\n      \"body\" : {\n        \"value\" : \"${term}\",\n        \"boost\" : 1.0\n      }\n    }\n  },\n\n \"highlight\" : {\n        \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n        \"post_tags\" : [\"\u003c/em\u003e\"],\n        \"fields\" : {\n            \"body\" : {}\n        }\n    }\n}\n",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 1:22:19 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {
-          "0": {
-            "graph": {
-              "mode": "table",
-              "height": 300.0,
-              "optionOpen": false
-            },
-            "helium": {}
-          }
-        },
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/undefined"
-      },
-      "settings": {
-        "params": {
-          "term": "чаньмигун"
-        },
-        "forms": {
-          "term": {
-            "name": "term",
-            "defaultValue": "",
-            "hidden": false
-          }
-        }
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
+            "type": "HTML",
+            "data": "Found \u003cb\u003e6\u003c/b\u003e hits\n"
+          },
           {
-            "type": "TABLE",
-            "data": "path\n2003_5\n1995_1\n1993-3\n1992_5\n1994_2\n2003_6\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493210492990_-860032661",
-      "id": "20170426-124132_1090252373",
-      "dateCreated": "Apr 26, 2017 12:41:32 PM",
-      "dateStarted": "Apr 26, 2017 1:22:19 PM",
-      "dateFinished": "Apr 26, 2017 1:22:20 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "import scala.concurrent.Await\nimport scala.concurrent.duration._\nimport wabisabi._\nimport scala.concurrent.ExecutionContext.Implicits.global\n",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 2:09:56 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {
-          "term": "test2"
-        },
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
           {
-            "type": "TEXT",
-            "data": "\nimport scala.concurrent.Await\n\nimport scala.concurrent.duration._\n\nimport wabisabi._\n\nimport scala.concurrent.ExecutionContext.Implicits.global\n"
-          }
-        ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493213254416_-1730400904",
-      "id": "20170426-132734_762500903",
-      "dateCreated": "Apr 26, 2017 1:27:34 PM",
-      "dateStarted": "Apr 26, 2017 2:09:56 PM",
-      "dateFinished": "Apr 26, 2017 2:09:58 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "import scala.concurrent.duration._\nval timeout \u003d Duration(10, SECONDS)\n\nval client \u003d new Client(\"http://elasticsearch:9200\")\nval res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n\nval body \u003d Await.result(res, atMost\u003dtimeout)",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 2:19:23 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": [
+            "type": "HTML",
+            "data": "\u003cb\u003e2003_5\u003c/b\u003e\n"
+          },
           {
-            "type": "TEXT",
-            "data": "\nimport scala.concurrent.duration._\n\ntimeout: scala.concurrent.duration.FiniteDuration \u003d 10 seconds\n\nclient: wabisabi.Client \u003d wabisabi.Client@4833a9aa\n\nres: scala.concurrent.Future[String] \u003d List()\nbody: String \u003d {\"took\":675,\"timed_out\":false,\"_shards\":{\"total\":5,\"successful\":5,\"failed\":0},\"hits\":{\"total\":6,\"max_score\":6.3093243,\"hits\":[{\"_index\":\"chigun\",\"_type\":\"issues\",\"_id\":\"AVuqAOdoEUet1mo5UwKz\",\"_score\":6.3093243,\"_source\":{\"path\":\"2003_5\"},\"highlight\":{\"body\":[\" сущностных глубинах\\nбуддизма.\\n■ ЛЕТПАДКй ДйГУН\\n\u003cem style\u003d\u0027color:red;\u0027\u003eЧаньмигун\u003c/em\u003e\\nВ.Л. Асмолова *\\n«Триединство Земля-Человек\",\" Пекинского университета,\\nдоктором философии Цан Даолаем, специалистом по \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e.\\nЦигун и жизнь\",\"» (\u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e) с помощью учителя Лю Ханьвэпя,\\nобучался у монаха монастыря Силипь по имени Цы Ю\",\"    12\\nВ.Л._Асмолова.\u003cem style\u003d\u0027color:red;\u0027\u003e_Чаньмигун_\u003c/em\u003e   16\\nВан_Пэйшэн._Оздоровительные_мини-методики_(Продолжение)_   19\"..."
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": " сущностных глубинах\nбуддизма.\n■ ЛЕТПАДКй ДйГУН\n\u003cem style\u003d\u0027color:red;\u0027\u003eЧаньмигун\u003c/em\u003e\nВ.Л. Асмолова *\n«Триединство Земля-Человек\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": " Пекинского университета,\nдоктором философии Цан Даолаем, специалистом по \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e.\nЦигун и жизнь\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "» (\u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e) с помощью учителя Лю Ханьвэпя,\nобучался у монаха монастыря Силипь по имени Цы Ю\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "    12\nВ.Л._Асмолова.\u003cem style\u003d\u0027color:red;\u0027\u003e_Чаньмигун_\u003c/em\u003e   16\nВан_Пэйшэн._Оздоровительные_мини-методики_(Продолжение)_   19\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": " тайны» (\u003cem style\u003d\u0027color:red;\u0027\u003eсяньмигун\u003c/em\u003e) под руководством мастера Чжан Жэньсяна, овладевал\n«методикой созерцания тайны\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e1992_5\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\nподготовленность участников. Цигунисты работали с комплексами инь-ян,\n\u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e, даоинь, лаоцзытайшанчжэньгун\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e2003_6\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": ".\u003cem style\u003d\u0027color:red;\u0027\u003e_Чаньмигун_\u003c/em\u003e........................................№_   5\nЮй_Дяньюань._Простая_методика_снижения_давления\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e1995_1\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": ";\nДаоинь общеоздоровительный, на сердце, почки, пищеварение; легкие; суставы;\nтайцзицигун; \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e1994_2\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": ".\n\u003cem style\u003d\u0027color:red;\u0027\u003eЧаньмигун\u003c/em\u003e является комплексом повышенной сложности и рассчитан на тех, кто уже\nимеет опыт занятий\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e1993-3\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": " стили).\nЦИГУН — тайцзицигун, иньян 1 и 2, даоинь, \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e, лаоцзытай-шанчжэньгун,\nцигун для глаз\n"
           }
         ]
-      },
-      "apps": [],
-      "jobName": "paragraph_1493215575161_1207450276",
-      "id": "20170426-140615_75219760",
-      "dateCreated": "Apr 26, 2017 2:06:15 PM",
-      "dateStarted": "Apr 26, 2017 2:19:23 PM",
-      "dateFinished": "Apr 26, 2017 2:19:26 PM",
-      "status": "FINISHED",
-      "progressUpdateIntervalMs": 500
-    },
-    {
-      "text": "// Parse JSON and save paths and highlishts into HTML",
-      "user": "anonymous",
-      "dateUpdated": "Apr 26, 2017 2:45:58 PM",
-      "config": {
-        "colWidth": 12.0,
-        "enabled": true,
-        "results": {},
-        "editorSetting": {
-          "language": "scala",
-          "editOnDblClick": false
-        },
-        "editorMode": "ace/mode/scala"
-      },
-      "settings": {
-        "params": {},
-        "forms": {}
-      },
-      "results": {
-        "code": "SUCCESS",
-        "msg": []
       },
       "apps": [],
       "jobName": "paragraph_1493215711182_-378653256",
       "id": "20170426-140831_673207983",
       "dateCreated": "Apr 26, 2017 2:08:31 PM",
-      "dateStarted": "Apr 26, 2017 2:45:58 PM",
-      "dateFinished": "Apr 26, 2017 2:45:59 PM",
+      "dateStarted": "Apr 27, 2017 2:21:28 PM",
+      "dateFinished": "Apr 27, 2017 2:21:29 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
     {
       "user": "anonymous",
-      "config": {},
+      "dateUpdated": "Apr 27, 2017 11:59:25 AM",
+      "config": {
+        "colWidth": 12.0,
+        "enabled": true,
+        "results": {},
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        },
+        "editorMode": "ace/mode/text"
+      },
       "settings": {
         "params": {},
         "forms": {}
@@ -296,64 +278,19 @@
   "name": "Make query to ElasticSearch",
   "id": "2CG6DFE3G",
   "angularObjects": {
-    "2CFR2BDMT:shared_process": [],
-    "2CFR7UKZ1:shared_process": [],
-    "2CGFZVG7D:shared_process": [],
-    "2CF3WWS9J:shared_process": [],
-    "2CE91BQFF:shared_process": [
-      {
-        "name": "search_20170426_124132_1090252373",
-        "object": [
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuqAOdoEUet1mo5UwKz",
-            "source": "{\"path\":\"2003_5\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuqAPRFEUet1mo5UwLV",
-            "source": "{\"path\":\"1995_1\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuqAOHpEUet1mo5UwKp",
-            "source": "{\"path\":\"1993-3\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuqAPJUEUet1mo5UwLQ",
-            "source": "{\"path\":\"1992_5\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuqAPR9EUet1mo5UwLY",
-            "source": "{\"path\":\"1994_2\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuqAOdoEUet1mo5UwK1",
-            "source": "{\"path\":\"2003_6\"}"
-          }
-        ]
-      }
-    ],
-    "2CFWNZWFW:shared_process": [],
-    "2CF6E2PQT:shared_process": [],
-    "2CF41VDSH:shared_process": [],
-    "2CGFT46NY:shared_process": []
+    "2CEN1WWVS:shared_process": [],
+    "2CH8N6H83:shared_process": [],
+    "2CFDV17ZA:shared_process": [],
+    "2CDUS3ZN7:shared_process": [],
+    "2CF4RQWRK:shared_process": [],
+    "2CG87DAGU:shared_process": [],
+    "2CGCJXQ5U:shared_process": [],
+    "2CF85ZWM9:shared_process": [],
+    "2CFFX1KZW:shared_process": []
   },
-  "config": {},
+  "config": {
+    "looknfeel": "report",
+    "personalizedMode": "false"
+  },
   "info": {}
 }
