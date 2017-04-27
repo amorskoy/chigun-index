@@ -77,9 +77,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n        import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e$path\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
+      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n        import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {\"fragment_size\" : 1000, \"number_of_fragments\" : 10, \"fragmenter\": \"span\", \"type\":\"unified\"}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e$path\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
       "user": "anonymous",
-      "dateUpdated": "Apr 27, 2017 2:21:28 PM",
+      "dateUpdated": "Apr 27, 2017 2:38:23 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -92,7 +92,7 @@
       },
       "settings": {
         "params": {
-          "term": "ЧАНЬМИГУН"
+          "term": "вэнчунь"
         },
         "forms": {
           "term": {
@@ -109,7 +109,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "Found \u003cb\u003e6\u003c/b\u003e hits\n"
+            "data": "Found \u003cb\u003e9\u003c/b\u003e hits\n"
           },
           {
             "type": "HTML",
@@ -117,7 +117,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2003_5\u003c/b\u003e\n"
+            "data": "\u003cb\u003e2001_1\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -125,7 +125,7 @@
           },
           {
             "type": "HTML",
-            "data": " сущностных глубинах\nбуддизма.\n■ ЛЕТПАДКй ДйГУН\n\u003cem style\u003d\u0027color:red;\u0027\u003eЧаньмигун\u003c/em\u003e\nВ.Л. Асмолова *\n«Триединство Земля-Человек\n"
+            "data": "«\u003cem style\u003d\u0027color:red;\u0027\u003eТунчунь\u003c/em\u003e» — «весна\nобъединяющая».\n"
           },
           {
             "type": "HTML",
@@ -133,31 +133,7 @@
           },
           {
             "type": "HTML",
-            "data": " Пекинского университета,\nдоктором философии Цан Даолаем, специалистом по \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e.\nЦигун и жизнь\n"
-          },
-          {
-            "type": "HTML",
-            "data": "\u003chr\u003e\n"
-          },
-          {
-            "type": "HTML",
-            "data": "» (\u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e) с помощью учителя Лю Ханьвэпя,\nобучался у монаха монастыря Силипь по имени Цы Ю\n"
-          },
-          {
-            "type": "HTML",
-            "data": "\u003chr\u003e\n"
-          },
-          {
-            "type": "HTML",
-            "data": "    12\nВ.Л._Асмолова.\u003cem style\u003d\u0027color:red;\u0027\u003e_Чаньмигун_\u003c/em\u003e   16\nВан_Пэйшэн._Оздоровительные_мини-методики_(Продолжение)_   19\n"
-          },
-          {
-            "type": "HTML",
-            "data": "\u003chr\u003e\n"
-          },
-          {
-            "type": "HTML",
-            "data": " тайны» (\u003cem style\u003d\u0027color:red;\u0027\u003eсяньмигун\u003c/em\u003e) под руководством мастера Чжан Жэньсяна, овладевал\n«методикой созерцания тайны\n"
+            "data": "«Люхэ \u003cem style\u003d\u0027color:red;\u0027\u003eтунчунь\u003c/em\u003e» (олень, журавль, туиг, весна) — символ мира и расцвета.\n"
           },
           {
             "type": "HTML",
@@ -165,7 +141,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1992_5\u003c/b\u003e\n"
+            "data": "\u003cb\u003e2004_3\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -173,7 +149,23 @@
           },
           {
             "type": "HTML",
-            "data": "\nподготовленность участников. Цигунисты работали с комплексами инь-ян,\n\u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e, даоинь, лаоцзытайшанчжэньгун\n"
+            "data": "﻿\nЧали \u003cem style\u003d\u0027color:red;\u0027\u003eВэньчунь\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e2003_1\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "﻿\n\nЧжан \u003cem style\u003d\u0027color:red;\u0027\u003eВэнчуиь\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -189,7 +181,7 @@
           },
           {
             "type": "HTML",
-            "data": ".\u003cem style\u003d\u0027color:red;\u0027\u003e_Чаньмигун_\u003c/em\u003e........................................№_   5\nЮй_Дяньюань._Простая_методика_снижения_давления\n"
+            "data": "﻿\nЧжан \u003cem style\u003d\u0027color:red;\u0027\u003eВэньчунь\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -197,7 +189,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1995_1\u003c/b\u003e\n"
+            "data": "\u003cb\u003e2000_6\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -205,7 +197,7 @@
           },
           {
             "type": "HTML",
-            "data": ";\nДаоинь общеоздоровительный, на сердце, почки, пищеварение; легкие; суставы;\nтайцзицигун; \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e\n"
+            "data": "К слову сказать,\nсамо понятие «вечная весна» (\u003cem style\u003d\u0027color:red;\u0027\u003eчанчунь\u003c/em\u003e) это часто синоним «долголетия» (чаншоу).\n"
           },
           {
             "type": "HTML",
@@ -213,7 +205,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1994_2\u003c/b\u003e\n"
+            "data": "\u003cb\u003e2004_1\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -221,7 +213,7 @@
           },
           {
             "type": "HTML",
-            "data": ".\n\u003cem style\u003d\u0027color:red;\u0027\u003eЧаньмигун\u003c/em\u003e является комплексом повышенной сложности и рассчитан на тех, кто уже\nимеет опыт занятий\n"
+            "data": "﻿\nЧжан \u003cem style\u003d\u0027color:red;\u0027\u003eВэпьчунь\u003c/em\u003e.\n"
           },
           {
             "type": "HTML",
@@ -229,7 +221,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1993-3\u003c/b\u003e\n"
+            "data": "\u003cb\u003e1998_3\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -237,7 +229,39 @@
           },
           {
             "type": "HTML",
-            "data": " стили).\nЦИГУН — тайцзицигун, иньян 1 и 2, даоинь, \u003cem style\u003d\u0027color:red;\u0027\u003eчаньмигун\u003c/em\u003e, лаоцзытай-шанчжэньгун,\nцигун для глаз\n"
+            "data": "Основатель ветви лунмэнь в даосизме мастер Цю \u003cem style\u003d\u0027color:red;\u0027\u003eЧанчунь\u003c/em\u003e при жизни достиг вершин\nцигун, а после смерти его останки «долгое время издавали необыкновенный запах»\nВ последние годы получил известность последователь даосизма из г.Лаошань Куан\nЧансю, который вообще беспрерывно распространял запах сандала.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e1998_1\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЧанчунь\u003c/em\u003e, пров.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e1996_6\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": ".;:: й\n\n\nЦенное наследие Чжан Саньфэна\nЛю Ху адун\nОсновоположником школы удан является Чжан Цзюныпи, известный кВ результате, обобщив личный опыт и все то, чему его научили Хо Лун и Цю \u003cem style\u003d\u0027color:red;\u0027\u003eЧанчунь\u003c/em\u003e, Чжан Саньфэн заложил основы своей школы\nокруга И, который находился в юго-западной части современной прцигун и ушу.\n"
           }
         ]
       },
@@ -245,8 +269,8 @@
       "jobName": "paragraph_1493215711182_-378653256",
       "id": "20170426-140831_673207983",
       "dateCreated": "Apr 26, 2017 2:08:31 PM",
-      "dateStarted": "Apr 27, 2017 2:21:28 PM",
-      "dateFinished": "Apr 27, 2017 2:21:29 PM",
+      "dateStarted": "Apr 27, 2017 2:38:23 PM",
+      "dateFinished": "Apr 27, 2017 2:38:23 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
