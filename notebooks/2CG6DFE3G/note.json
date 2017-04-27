@@ -77,9 +77,9 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n        import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {\"fragment_size\" : 1000, \"number_of_fragments\" : 10, \"fragmenter\": \"span\", \"type\":\"unified\"}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e$path\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
+      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n    import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val hrefBase \u003d \"http://127.0.0.1/chigun-index/resources/html\"\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {\"fragment_size\" : 1000, \"number_of_fragments\" : 10, \"fragmenter\": \"span\", \"type\":\"unified\"}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        val href \u003d s\"$hrefBase/$path.htm\"\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003d$href\u003e$path\u003c/a\u003e\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
       "user": "anonymous",
-      "dateUpdated": "Apr 27, 2017 2:38:23 PM",
+      "dateUpdated": "Apr 27, 2017 8:59:28 PM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
@@ -92,7 +92,7 @@
       },
       "settings": {
         "params": {
-          "term": "вэнчунь"
+          "term": "синьи"
         },
         "forms": {
           "term": {
@@ -109,7 +109,7 @@
         "msg": [
           {
             "type": "HTML",
-            "data": "Found \u003cb\u003e9\u003c/b\u003e hits\n"
+            "data": "Found \u003cb\u003e41\u003c/b\u003e hits\n"
           },
           {
             "type": "HTML",
@@ -117,7 +117,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2001_1\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2002_2.htm\u003e2002_2\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -125,7 +125,7 @@
           },
           {
             "type": "HTML",
-            "data": "«\u003cem style\u003d\u0027color:red;\u0027\u003eТунчунь\u003c/em\u003e» — «весна\nобъединяющая».\n"
+            "data": "Ли Хуань-чжан родился в 1925 году в уезде \u003cem style\u003d\u0027color:red;\u0027\u003eЛиньи\u003c/em\u003e провинции Шаньдун, в\nматериковом Китае; родителями его были образованные люди из служилого сословия.\n"
           },
           {
             "type": "HTML",
@@ -133,7 +133,15 @@
           },
           {
             "type": "HTML",
-            "data": "«Люхэ \u003cem style\u003d\u0027color:red;\u0027\u003eтунчунь\u003c/em\u003e» (олень, журавль, туиг, весна) — символ мира и расцвета.\n"
+            "data": "Ли гордится тем, что множество знаменитых\nпредставителей китайской культуры были уроженцами \u003cem style\u003d\u0027color:red;\u0027\u003eЛиньи\u003c/em\u003e; самыми известными из\nего земляков являются выдающийся военный стратег древности Чжугэ Лян (181-234)\nи непревзойденный мастер каллиграфии Ван Си-чжи (321-379).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В 1991 году правительственный Комитет по делам культуры присудил ему\nпремию \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e-чуань за достижения в области народного искусства —\nсамую престижную награду, которой могут удостоиться на Тайване мастера\nнародного искусства.\n"
           },
           {
             "type": "HTML",
@@ -141,7 +149,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2004_3\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1997_4.htm\u003e1997_4\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -149,7 +157,15 @@
           },
           {
             "type": "HTML",
-            "data": "﻿\nЧали \u003cem style\u003d\u0027color:red;\u0027\u003eВэньчунь\u003c/em\u003e.\n"
+            "data": ".||  |*|\n|||____|\u0027T_|_|\n\nЦентр ИНБИ\nС 1 по 8 ноября 1997 года в городе Орле проводит семинар по даосским внутренним\nпрактикам\nПрограмма семинара:\nДАОССКАЯ АЛХИМИ ТАЙЦЗИ (стиль Чэнь) искусство шелковой лао-цзя 1 часть\n(уровеш лао-цзя 2 часть (уровень^\nБАГУА (стиль Лян)\nнахождение Цянь и Кунь (первые восемь форм) движение Кань и Ли (вторые восемь\nформ) четыре превращения Тайи 16 движений по прямой (четыре линии Ицзина)\n\u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e\nформы «пяти первоэлементов»\nТУЙШОУ\nпарная форма\nТАЙЦЗИ-МЯЧ\nплетение шелковой нити форма с мячом (стиль Чэнь)\n(размер мяча — баскетбольный для мужчин — темный цвет, для женщин — светлый)\nТАЙЦЗИ-ВЕЕР\nПродолжительность занятий не менее 8 часов в день.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Голос корейца вывел меня из размышлений.\n-    Привычку Мудрой \u003cem style\u003d\u0027color:red;\u0027\u003eСвиньи\u003c/em\u003e ставить ноги в еду можно трактовать и\nболее глубоко.\n"
           },
           {
             "type": "HTML",
@@ -157,7 +173,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2003_1\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1993-3.htm\u003e1993-3\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -165,7 +181,39 @@
           },
           {
             "type": "HTML",
-            "data": "﻿\n\nЧжан \u003cem style\u003d\u0027color:red;\u0027\u003eВэнчуиь\u003c/em\u003e.\n"
+            "data": ".);\n—    \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e («мыслеформы») порождаются сочетанием 64 гуа и образуют многообразие\nформ реальной жизни.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Бесчисленное множество и многообразие форм реальной жизни Гу дао (Корень\nдао) «Застава вэйлюй», «Золотая печь», \u003cem style\u003d\u0027color:red;\u0027\u003eСинъи\u003c/em\u003e\n1.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eСинъи\u003c/em\u003e («мыслеформы») — это багуа тела, не имеющего формы.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Знаменитый мастер воинских искусств Сунь Лутан дает следующую характеристику\nэтой системы: «...тайцзи содержит Великую Пустоту, багуа — диалектику\nизменений, \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e — правильный удар.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eСинъи\u003c/em\u003e применяется против сильного соперника, но недопустимо против\nслабого.\n"
           },
           {
             "type": "HTML",
@@ -173,7 +221,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2003_6\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1991_3.htm\u003e1991_3\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -181,7 +229,47 @@
           },
           {
             "type": "HTML",
-            "data": "﻿\nЧжан \u003cem style\u003d\u0027color:red;\u0027\u003eВэньчунь\u003c/em\u003e.\n"
+            "data": "К нем�юноше каждый день практиковать саньтиши для овладения «кулаком» \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Как говорится, терпение и\nсаньтиши — это основа гимнастики \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Тело его стало как будто вылитым иЕще через три года Ци Гунбо стал известным на севере страны мастером \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\nдостиг этого, Гунбо, ты овладел мастерством», — сказал он.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сунь Лутан был назначен руководителем государственной школы ушу провинции Цзянсу.\nулыбаясь, сказал: «За три года я только и научился, что «стоУ него было много учеников, но учитель взял с собой только Ци Гунбо и назначил его на должность\nблестящими от волнениями глазами ответил: «Три года не протренера гимнастики \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e.\nтрудным и теперь быстро освоишь \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e. \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Ручаюсь, что через пС тех пор популярность его постоянно росла, и скоро он стал известен как большой мастер \u003cem style\u003d\u0027color:red;\u0027\u003eсинъи\u003c/em\u003e\nмладших, и старших».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Применялись также\nсоломенные, деревянные, каменные, керамические мячи и мячи, представлявшие собой надутый воздухом мочевой пузырь \u003cem style\u003d\u0027color:red;\u0027\u003eсвиньи\u003c/em\u003e. \n"
           },
           {
             "type": "HTML",
@@ -189,7 +277,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2000_6\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1992_1.htm\u003e1992_1\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -197,7 +285,31 @@
           },
           {
             "type": "HTML",
-            "data": "К слову сказать,\nсамо понятие «вечная весна» (\u003cem style\u003d\u0027color:red;\u0027\u003eчанчунь\u003c/em\u003e) это часто синоним «долголетия» (чаншоу).\n"
+            "data": "Иероглиф «син», обозначающий «человеческую природу», составлен из двух частей:\n«сердце» или «ум» (\u003cem style\u003d\u0027color:red;\u0027\u003eсинь\u003c/em\u003e) и «рождаться» (шен).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сердце (\u003cem style\u003d\u0027color:red;\u0027\u003eсинь\u003c/em\u003e) в соответствии с\nкитайскими понятиями есть вместилище эмоциального сознания, которое\nпробуждается пятью чувствами, контролируемыми\nреакциями на восприятие внешнего мира.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Вера \u003cem style\u003d\u0027color:red;\u0027\u003eСинхи\u003c/em\u003e в Благословенного усилилась.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "И сердце \u003cem style\u003d\u0027color:red;\u0027\u003eСинхи\u003c/em\u003e преисполнилось радостью.\n"
           },
           {
             "type": "HTML",
@@ -205,7 +317,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e2004_1\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1998_5.htm\u003e1998_5\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -213,7 +325,15 @@
           },
           {
             "type": "HTML",
-            "data": "﻿\nЧжан \u003cem style\u003d\u0027color:red;\u0027\u003eВэпьчунь\u003c/em\u003e.\n"
+            "data": "Современные мастера цигун Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e, Ван Липин и\nдругие прида-\u0027 ют голоданию большое значение, не только практикуя его сами, но\nи настоятельно призывают к этому своих учеников Согласно преданиям, некоторые\nмастера цигун древности смогли полностью отказаться от еды В йоге голодание с\nцелью очищения организма от шлаков также зачастую считается основополагающей\nпрактикой.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Учитель Янь\n\u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e говорит, что учиться надо у всего, что тебя окружает.\n"
           },
           {
             "type": "HTML",
@@ -221,7 +341,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1998_3\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1991_1.htm\u003e1991_1\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -229,7 +349,79 @@
           },
           {
             "type": "HTML",
-            "data": "Основатель ветви лунмэнь в даосизме мастер Цю \u003cem style\u003d\u0027color:red;\u0027\u003eЧанчунь\u003c/em\u003e при жизни достиг вершин\nцигун, а после смерти его останки «долгое время издавали необыкновенный запах»\nВ последние годы получил известность последователь даосизма из г.Лаошань Куан\nЧансю, который вообще беспрерывно распространял запах сандала.\n"
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e — живая легенда (Рассказ о мастере цигун) 48 Минь\nКэ.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "К счастью, свидетелем этого случайно оказался Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e молча стоял напротив Ли Пина.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e закончил сеанс и ушел к другим больным.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e угадал его мысль: «Не бойтесь, считайте, что перелома не\nбыло».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "— приказал ему Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e, как командир солдату. —\nЧто вы боитесь?\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e воздействует на переломы прежде всего излучением ци.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e обеими\nруками прижал место перелома.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С еще более сложным случаем Янь\n\u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e имел дело в июле 1985 года.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e — живая легенда\nО перечисленных в статье стилях ушу см.: Маслов А.\n"
           },
           {
             "type": "HTML",
@@ -237,7 +429,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1998_1\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1998_4.htm\u003e1998_4\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -245,7 +437,15 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЧанчунь\u003c/em\u003e, пров.\n"
+            "data": "Три случая излечения астмы с помощью цигун 36\nХу Цзяянь, Ху Цзинсун, Лю \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сергеева\nОпыт применения “мысленной акупунктуры” в клинической практике\nХу Цзяянь, Ху Цзинсун, Лю \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nСоставной частью терапевтической методики учителя Лю Шаобиня “небесная\nколонна”2 является цигун-акупунктура, представляющая собой воздействие на\nбиологически активные точки в лечебных целях с помощью “внешней ци” посредством\nпридания ей иглоподобной формы.\n"
           },
           {
             "type": "HTML",
@@ -253,7 +453,7 @@
           },
           {
             "type": "HTML",
-            "data": "\u003cb\u003e1996_6\u003c/b\u003e\n"
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1997_3.htm\u003e1997_3\u003c/a\u003e\u003c/b\u003e\n"
           },
           {
             "type": "HTML",
@@ -261,7 +461,103 @@
           },
           {
             "type": "HTML",
-            "data": ".;:: й\n\n\nЦенное наследие Чжан Саньфэна\nЛю Ху адун\nОсновоположником школы удан является Чжан Цзюныпи, известный кВ результате, обобщив личный опыт и все то, чему его научили Хо Лун и Цю \u003cem style\u003d\u0027color:red;\u0027\u003eЧанчунь\u003c/em\u003e, Чжан Саньфэн заложил основы своей школы\nокруга И, который находился в юго-западной части современной прцигун и ушу.\n"
+            "data": "Вавилова, 31, корп. 1\nЖурнал отпечатан в типографии ИЧП \"Шанс\"\nI МАСТЕРА ЦЙТYtf\n\n\nI\n\nМастер цигун Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nКэ Юньлу\nЯнь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e является наиболее известным в настоящее время мастером цигун.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Мастер Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nвоздействовал на раствор, находясь на расстоянии 10 км от него.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e Да, это так.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Все, что вы сказали, верно.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Сразу трудно ответить.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Можно сказать и так, но не бывает, чтобы я вообще не имел понятия о\nкакой-либо из своих способностей.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: И отдельно, и вместе.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: В определенной степени можно понимать и так.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e: Совершенно верно\nМастера цигун и дети с особыми способностями\nЯнь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e является мастером цигун высокого уровня, и его постоянно окружают\nдети, обладающие теми или иными особыми способностями.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e ответил: «Конечно, нет.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1993-1.htm\u003e1993-1\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Все полученные письма будут направлены в ее\nадрес.\n4\nЯ стремлюсь утвердить истинное понимание цигун Систематизированное\nизложение цигун-доклада Янь Синя\nЯнь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e родился в 1950 г. в провинции Сычуань, закончил институт традиционной\nкитайской медицины в г.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Янь \u003cem style\u003d\u0027color:red;\u0027\u003eСинь\u003c/em\u003e\nявляется самым авторитетным мастером цигун в Китае.\n"
           }
         ]
       },
@@ -269,8 +565,8 @@
       "jobName": "paragraph_1493215711182_-378653256",
       "id": "20170426-140831_673207983",
       "dateCreated": "Apr 26, 2017 2:08:31 PM",
-      "dateStarted": "Apr 27, 2017 2:38:23 PM",
-      "dateFinished": "Apr 27, 2017 2:38:23 PM",
+      "dateStarted": "Apr 27, 2017 8:59:28 PM",
+      "dateFinished": "Apr 27, 2017 8:59:29 PM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
