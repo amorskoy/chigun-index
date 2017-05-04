@@ -11,13 +11,6 @@ services:
       - bootstrap.memory_lock=false
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
       
-  kibana:
-    image: kibana:5.3
-    ports:
-      - 5601:5601
-    links:
-      - elasticsearch:elasticsearch
-      
   zeppelin:
     image: dylanmei/zeppelin
     environment:
