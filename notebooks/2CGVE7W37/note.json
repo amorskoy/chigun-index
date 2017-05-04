@@ -1,0 +1,1189 @@
+{
+  "paragraphs": [
+    {
+      "text": "%spark.dep\nz.load(\"com.github.gphat:wabisabi_2.11:2.2.0\")\nz.load(\"net.liftweb:lift-json_2.11:3.0.1\")",
+      "user": "anonymous",
+      "dateUpdated": "May 4, 2017 9:50:05 AM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "res0: org.apache.zeppelin.dep.Dependency \u003d org.apache.zeppelin.dep.Dependency@142ed687\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493891341903_969522766",
+      "id": "20170426-135930_923398002",
+      "dateCreated": "May 4, 2017 9:49:01 AM",
+      "dateStarted": "May 4, 2017 9:50:05 AM",
+      "dateFinished": "May 4, 2017 9:50:42 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "import scala.concurrent.Await\nimport scala.concurrent.duration._\nimport wabisabi._\nimport scala.concurrent.ExecutionContext.Implicits.global\nimport net.liftweb.json.DefaultFormats\nimport net.liftweb.json._\nimport net.liftweb.json.JsonDSL._\n",
+      "user": "anonymous",
+      "dateUpdated": "May 4, 2017 9:50:52 AM",
+      "config": {
+        "tableHide": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true
+      },
+      "settings": {
+        "params": {
+          "term": "test2"
+        },
+        "forms": {}
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "TEXT",
+            "data": "\nimport scala.concurrent.Await\n\nimport scala.concurrent.duration._\n\nimport wabisabi._\n\nimport scala.concurrent.ExecutionContext.Implicits.global\n\nimport net.liftweb.json.DefaultFormats\n\nimport net.liftweb.json._\n\nimport net.liftweb.json.JsonDSL._\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493891341904_979910986",
+      "id": "20170426-132734_762500903",
+      "dateCreated": "May 4, 2017 9:49:01 AM",
+      "dateStarted": "May 4, 2017 9:50:52 AM",
+      "dateFinished": "May 4, 2017 9:51:08 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "text": "// Parse JSON and save paths and highlishts into HTML\n{\n    import scala.concurrent.duration._\n    val timeout \u003d Duration(10, SECONDS)\n    \n    val hrefBase \u003d \"http://127.0.0.1/chigun-index/resources/html\"\n    \n    val client \u003d new Client(\"http://elasticsearch:9200\")\n    val query \u003d s\"\"\" {\n      \"_source\" : [\"path\"],\n      \"size\" : 10,\n      \"sort\" : [{\"_score\" : \"desc\"}],\n      \"query\" : {\n        \"match\" : {\n          \"body\" : {\n            \"query\" : \"${z.input(\"term\")}\",\n            \"fuzziness\" : \"AUTO\",\n            \"operator\": \"and\",\n            \"minimum_should_match\": \"90%\"\n          }\n        }\n      },\n      \n     \"highlight\" : {\n            \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n            \"post_tags\" : [\"\u003c/em\u003e\"],\n            \"fields\" : {\n                \"body\" : {\"fragment_size\" : 1000, \"number_of_fragments\" : 10, \"fragmenter\": \"span\", \"type\":\"unified\"}\n            }\n        }\n    }\n    \"\"\"\n    \n    val res \u003d client.search(index\u003d\"chigun\", query\u003dquery).map(_.getResponseBody)\n    val jsonString \u003d Await.result(res, atMost\u003dtimeout)\n\n    \n    implicit val formats \u003d DefaultFormats\n    val json \u003d parse(jsonString)\n    val total \u003d (json \\ \"hits\" \\ \"total\").extract[Int]\n    val hits \u003d (json \\ \"hits\" \\ \"hits\").children\n    \n    println(s\"%html Found \u003cb\u003e$total\u003c/b\u003e hits\")\n    \n    for(h \u003c- hits) {\n        val path \u003d (h \\ \"_source\" \\ \"path\").extract[String]\n        val href \u003d s\"$hrefBase/$path.htm\"\n        \n        println(s\"%html \u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\")\n        println(s\"%html \u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003d$href\u003e$path\u003c/a\u003e\u003c/b\u003e\")\n        \n        val highlights \u003d (h \\ \"highlight\" \\ \"body\").children\n        for(hl \u003c- highlights) {\n            val body \u003d hl.extract[String]\n            \n            println(\"%html \u003chr\u003e\")\n            println(s\"%html $body\")\n        }\n    }\n}",
+      "user": "anonymous",
+      "dateUpdated": "May 4, 2017 10:05:00 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/scala",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "scala",
+          "editOnDblClick": false
+        },
+        "editorHide": false,
+        "tableHide": false
+      },
+      "settings": {
+        "params": {
+          "term": "улучшения зрения"
+        },
+        "forms": {
+          "term": {
+            "name": "term",
+            "displayName": "term",
+            "type": "input",
+            "defaultValue": "",
+            "hidden": false
+          }
+        }
+      },
+      "results": {
+        "code": "SUCCESS",
+        "msg": [
+          {
+            "type": "HTML",
+            "data": "Found \u003cb\u003e69\u003c/b\u003e hits\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1997_1.htm\u003e1997_1\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Речь идет об \u003cem style\u003d\u0027color:red;\u0027\u003eулучшении\u003c/em\u003e регулирования функций\nцентральной нервной системы.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Если мало спите, но чувствуете себя бодрым, плодотворно работаете,\nощущаете \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e памяти, то все в порядке.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Цигун также способствует \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e микроциркуляции крови.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Благодаря этому происходит \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e функций легких.\n4.    \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Абдоминальное дыхание, сопровождающееся сокращением и\nрасслаблением, т.е. своего рода массажем живота, способствует \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e\nмикроциркуляции крови в тонком кишечнике, а следовательно, и \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e усвоения\nпищи.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Такое \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e функции пищеварения\nпроисходит на фоне укрепления физиологических функций всего организма.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Значительное \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e\nнаступило в 36 случаях.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Однако с точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e выявленных\nтенденций, эти результаты достаточно красноречивы, а также ценны и полезны.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Если измерять их по\nшкале человеческого \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e, то они представляют собой высший гносеологический\nуровень.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "На Тайване все еще в детстве получают \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e основ каллиграфии.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1991_2.htm\u003e1991_2\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Постепенно росли \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e и мастерство Лю Шаобиня.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eУлучшение\u003c/em\u003e проходимости меридианов жэньмай и думай. 2.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Тренировка мышц языка, \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e дикции. 3.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eУлучшение\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e, лечение заболеваний глаз. 2.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Необходимо, чтобы вдохи и выдохи были ритмичными и равномерными, а\nтемп дыхания синхронизирован с переводом фокуса внимания и темпом \u003cem style\u003d\u0027color:red;\u0027\u003eчтения\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Упражнения способствуют «раскрепощению» и \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e\n               состояния глазных мышц.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Третий этап\n               — «перемещение ци для сохранения \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Он включает «наполнение» ци области даньтянь, а также подведение ци к\n               пальцам и точкам лаогун в центрах ладоней посредством техники «открытия и закрытия», с тем чтобы использовать\n               ци для терапевтического воздействия на глаза — коррекции дефектов \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e, удаления из глаз «патогенной информации»,\n               \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e циркуляции ци и крови в периферии глаза.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "«Перемещение ци для сохранения \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e»                                                                     (4) «Питание ци для защиты \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e»: наложите кисти на область пупка, в течение трех минут сосредоточивайтесь\n1.    \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Упражнение для профилактики \u003cem style\u003d\u0027color:red;\u0027\u003eухудшения\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2001_1.htm\u003e2001_1\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Точка\n\u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e редакции не всегда совпадает с мнением авторов.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e цигун, «особые способности», «чудесные способности» относятся к\nмагии.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e современной медицины,\nв большинстве своем они соответствуют физиологическим и психологическим\nособенностям человека, способствуют укреплению его здоровья.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Первая — это направление «выплавления пилюли», развивавшееся в рамках даосского\n\u003cem style\u003d\u0027color:red;\u0027\u003eучения\u003c/em\u003e о «чудесной пилюле».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "«Пестование ци»\nЭто упражнение называют также «воспитанием ци», «\u003cem style\u003d\u0027color:red;\u0027\u003eулучшением\u003c/em\u003e качества ци».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eУлучшение\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e\nВыполняется после упражнений Большое дерево и ян-цигун.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eУлучшение\u003c/em\u003e\nкачества пищи\nВыполняется во время еды сосредоточением на вкушаемых еде и питье посредством\nмыслеобразного восполнения недостающих им свойств.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Самомассаж также снимает утомление,\nвосстанавливает силы, придает дополнительную энергию, делает сознание более\nясным, улучшает слух и \u003cem style\u003d\u0027color:red;\u0027\u003eзрение\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e современной медицины, точечный самомассаж способствует\nвосстановлению нормального функционирования нервной системы, \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e обмена\nвеществ и укреплению защитных сил организма, мобилизации его скрытых резервов,\nвосстановлению нормального кровообращения, ускорению репарации тканей — то есть\nиграет роль эффективного метода профилактики и лечения заболеваний, сохранения\nи укрепления здоровья.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В\nлегких случаях или при успешном лечении полное выздоровление или, по крайней\nмере, значительное \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e состояния может наступить буквально через\nнесколько дней.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1994_3.htm\u003e1994_3\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Комплекс «Раскрытие глаз» для \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e\n\u003cem style\u003d\u0027color:red;\u0027\u003eзрения_\u003c/em\u003e   14\nВ.Л.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Эта\nточка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e получила название «взаимосоответствия неба и человека».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "практической точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e методики.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Вот и скажите, как тут не поверить в чудо «\u003cem style\u003d\u0027color:red;\u0027\u003eозарения\u003c/em\u003e\nосени. \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сергеева\nКомплекс «Раскрытие глаз» для \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e\nМо Вэньдань\nI.    \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЗнания\u003c/em\u003e и Вера не есть одно и то же.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Это все равно что попытка передать вид сложного \u003cem style\u003d\u0027color:red;\u0027\u003eздания\u003c/em\u003e с\nпомощью плоских фотоснимков.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Впоследствии, по мере усвоения\nупражнения и \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e физического состояния, можно постепенно увеличивать\nпродолжительность занятий.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Следует отказаться от \u003cem style\u003d\u0027color:red;\u0027\u003eкурения\u003c/em\u003e и алкоголя.\n3.    \n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Через некоторое время после начала занятий вместе с \u003cem style\u003d\u0027color:red;\u0027\u003eулучшением\u003c/em\u003e\nсостояния происходит \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e аппетита, поэтому необходимо своевременно\nувеличивать количество приемов пищи или вводить дополнительное питание.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2000_2.htm\u003e2000_2\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Точка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e редакции не всегда совпадает с мнением авторов.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Е Тяныпи\nособо подчеркивает необходимость отказа от \u003cem style\u003d\u0027color:red;\u0027\u003eкурения\u003c/em\u003e и алкоголя.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Все воспринимается как единая стройная система \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e\nприроды и естества человека.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Вот один из секретов цигун\n— секрет \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e внутреннего состояния, оздоровления и омоложения организма.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Наоборот — любой человек, сделавший хотя\nбы полшага на пути \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e своей природы, достоин уважения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Это ведет к\nпрофанации высокого \u003cem style\u003d\u0027color:red;\u0027\u003eучения\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Внешне это проявляется в \u003cem style\u003d\u0027color:red;\u0027\u003eулучшении\u003c/em\u003e психического и\nфизического состояния, изменении мироощущения в сторону\nобъективного восприятия.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Она позволяет\nскачкообразно, одномоментно обретать определенные \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "По мере созревания человек приобретает новые \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e, познает природу\nи себя.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В районе Центрального кольца все \u003cem style\u003d\u0027color:red;\u0027\u003eздания\u003c/em\u003e имеют 50-60 и больше этажей.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1994_5-6.htm\u003e1994_5-6\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Я\nобращался к специалистам то западной, то китайской медицины, однако \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e\nне наступало.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Пребывание в течение 10 месяцев в больнице, хотя и привело к некоторому\nослаблению симптомов, но заметного \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e не дало.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сей час он сам передает свои \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e молодому поколению монахов.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сначала человеку дается возможность увидеть то, что обычным \u003cem style\u003d\u0027color:red;\u0027\u003eзрением\u003c/em\u003e увидеть\nневозможно.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Вера и \u003cem style\u003d\u0027color:red;\u0027\u003eЗнания\u003c/em\u003e не есть одно и то же.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "И хотя в его состоянии произойдет внешнее \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e, человек сей станет\nносителем разрушительного сигнала и пойдет к погибели.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Кроме\nтого, произошло \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e показателей крови.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Имбирь употребляют как приправу и\nпосле еды для \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e переваривания пищи.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Сироп из имбирного корня в старое\nвремя врачи использовали для стимуляции желудочной секреции и \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e\nпищеварения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Солнце уже миновало \u003cem style\u003d\u0027color:red;\u0027\u003eзенит\u003c/em\u003e, было часа два, я встал и двинулся обратно.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1999_1.htm\u003e1999_1\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Точка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e редакции не всегда совпадает с мнением авторов.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Заметное \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Читайте в следующем номере:\nКэ Юньлу\nЗАНЯТИЯ ЦИГУН: СЕКРЕТЫ И ЗАБЛУЖДЕНИЯ (ГЛАВА ИЗ КНИГИ)\n\nЦигун способствует \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e у учащихся\n\u0026Чэнь Дайань\nВ настоящее время внимание специалистов все больше привлекает устойчивая\nтенденция к ухудшению \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e у учащихся высших учебных заведений.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Метод исследования\n1)    Проверка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Перед\nзанятием можно совершить медленную пробежку для \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e кровообращения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В результате занятий у учащихся с нормальной остротой \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e отмечено\nв 3,4% случаев, со средней степенью близорукости — в 32,6% случаев, а с большой\nстепенью близорукости — в 66,4% случаев.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В результате\nослабляется мышечное напряжение, улучшается кровоснабжение и достигается эффект\nпостепенного \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e.\n2)    “Выходным отверстием печени являются глаза”, “семенная ци всех внутренних\nорганов поднимается вверх и поступает в глаза”.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Не важно, кто проводит \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С точки\n\u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e экономии времени, это, бесспорно, выигрышно, но, с точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e цигун, —\nне всегда.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e цигун, это явление негативное.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1994_4.htm\u003e1994_4\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Известна и\nтакая точка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e: «Способность видеть свет естества (син) и есть мастерство».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В «И цзине» в лаконичной форме и представлены соответствующие \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Одна точка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e: это символ\nБольшинство же не верили ни в каких духов, а трактовали «И цзин» исключитель�мужского полового органа; другая — это число «один».\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Упражнение способствует \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e пищеварения (рис.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Поэтому \u003cem style\u003d\u0027color:red;\u0027\u003eзвенья\u003c/em\u003e обычно\nизображают по кругу, подчеркивая, что у 12-членной формулы нет ни начала ни\nконца.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Осознание\nпространства причины помогает воспроизвести ядро через \u003cem style\u003d\u0027color:red;\u0027\u003eзвенья\u003c/em\u003e цепочки времени.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "По мере \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e состояния целесообразно постепенно\nувеличивать темп и продолжительность ходьбы.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Ножные ванны способствуют укреплению области поясницы и почек, улучшают слух и\n\u003cem style\u003d\u0027color:red;\u0027\u003eзрение\u003c/em\u003e, психологическое состояние.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Регулярные занятия, таким образом, будут\nспособствовать восстановлению и \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e функций мозга.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Душевному подъему и \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e настроения больных неврастенией также\nспособствуют ежедневные прогулки.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/2001_3.htm\u003e2001_3\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Точка\n\u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e редакции не всегда совпадает с мнением авторов.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Как расставить мебель с\nточки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e фэншуй?\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В 5 фэнях от ноздрей находится точка инсян,\nрасположенная на ручном ян-меридиане толстого кишечника, воздействие на которую\nтакже способствует \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e обоняния.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Приведенный выше прием улучшает циркуляцию ци и крови, а следовательно,\nспособствует \u003cem style\u003d\u0027color:red;\u0027\u003eулучшению\u003c/em\u003e \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e и содействует нормальному функционированию\nвнутренних органов.\nд)    Массаж точки фэнчи\nПридав кистям рук форму «пальцы-меч», направьте их на точку фэнчи (на впадине у\nзаднего края волос на затылке).\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "После приема кальциУ и витамина D у пациентов с пониженным содержанием\nкальциУ и фосфора происходит \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e Стих показателей, многие симптомы\nисчезаТт или смУгчаТтсУ, особенно заметно улучшаетсУ работа сердца (реже бываТт\nприступы сердцебиениУ, нехватки воздуха, усиливаТт-сУ тоны сердца и его\nсокращениУ), наполнУетсУ пульс, происходит \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e психологического\nсостоУниУ.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "С точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e\nметеорологии, ветер — не что иное, как движение слоев атмосферного воздуха.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Специалисты в области чайного производства зачастую не имеют общего \u003cem style\u003d\u0027color:red;\u0027\u003eмнения\u003c/em\u003e по\nвопросу о классификации видов чая.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Таким образом, с точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e полезного влияния на состояние\nздоровья, зеленый чай лучше красного.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Если посмотреть на проблему под этим углом \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e,\nвопрос о цене жизни одновременно и упрощается, и усложняется.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Творение злого \u003cem style\u003d\u0027color:red;\u0027\u003eгения\u003c/em\u003e является бессрочным оружием\nмассового поражения.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr style\u003d\u0027color:red; border-color:red;\u0027\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cb\u003e\u003ca target\u003d\u0027_blank\u0027 href\u003dhttp://127.0.0.1/chigun-index/resources/html/1998_2.htm\u003e1998_2\u003c/a\u003e\u003c/b\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Точка \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e редакции не всегда совпадает с мнением авторов.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Однако в вопросе о том, как это делать, \u003cem style\u003d\u0027color:red;\u0027\u003eмнения\u003c/em\u003e\nрасходились.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Кроме этого, это упражнение приносит заметное \u003cem style\u003d\u0027color:red;\u0027\u003eулучшение\u003c/em\u003e\nсостояния людей, страдающих или страдавших ранее расстройствами психики.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Опять\n\u003cem style\u003d\u0027color:red;\u0027\u003eзвенит\u003c/em\u003e тишина немногочисленного дачного поселения, отрезанного от внешнего\nмира3 .\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "В следующем столетии одной из основных причин \u003cem style\u003d\u0027color:red;\u0027\u003eухудшения\u003c/em\u003e здоровья\nчеловека станет перегрузка информацией.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Уменьшать прием лекарств вплоть до полного\nотказа от них надо постепенно, по мере \u003cem style\u003d\u0027color:red;\u0027\u003eулучшения\u003c/em\u003e состояния больного.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "К сожалению, сторонники этой точки \u003cem style\u003d\u0027color:red;\u0027\u003eзрения\u003c/em\u003e упускают\nиз вида один факт: бобовые растения содержат высококачественные полноценные\nбелки.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Тайбэй — город, полный чудес\nСовременные коммерческие \u003cem style\u003d\u0027color:red;\u0027\u003eздания\u003c/em\u003e выстроились рядами вдоль улиц.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003cem style\u003d\u0027color:red;\u0027\u003eЗдания\u003c/em\u003e построены из самого современного бетона и стекла, а эти надстройки — из\nасбестовых плиток или коричневатых листов гофрированного железа.\n"
+          },
+          {
+            "type": "HTML",
+            "data": "\u003chr\u003e\n"
+          },
+          {
+            "type": "HTML",
+            "data": "Ведь человек, долгое время накапливающий \u003cem style\u003d\u0027color:red;\u0027\u003eзнания\u003c/em\u003e, обязательно должен передать их\nпотомкам.\n"
+          }
+        ]
+      },
+      "apps": [],
+      "jobName": "paragraph_1493891341905_979526237",
+      "id": "20170426-140831_673207983",
+      "dateCreated": "May 4, 2017 9:49:01 AM",
+      "dateStarted": "May 4, 2017 10:04:46 AM",
+      "dateFinished": "May 4, 2017 10:04:47 AM",
+      "status": "FINISHED",
+      "progressUpdateIntervalMs": 500
+    },
+    {
+      "dateUpdated": "May 4, 2017 9:49:01 AM",
+      "config": {
+        "colWidth": 12.0,
+        "editorMode": "ace/mode/text",
+        "results": {},
+        "enabled": true,
+        "editorSetting": {
+          "language": "text",
+          "editOnDblClick": false
+        }
+      },
+      "settings": {
+        "params": {},
+        "forms": {}
+      },
+      "apps": [],
+      "jobName": "paragraph_1493891341907_980295735",
+      "id": "20170426-142405_1684349357",
+      "dateCreated": "May 4, 2017 9:49:01 AM",
+      "status": "READY",
+      "errorMessage": "",
+      "progressUpdateIntervalMs": 500
+    }
+  ],
+  "name": "Make query to ElasticSearch 2",
+  "id": "2CGVE7W37",
+  "angularObjects": {
+    "2CH82G77V:shared_process": [],
+    "2CH38J6EV:shared_process": [],
+    "2CGHD78CH:shared_process": [],
+    "2CGPA72C5:shared_process": [],
+    "2CJ4WS7ED:shared_process": [],
+    "2CHPS76W8:shared_process": [],
+    "2CHH2X1NE:shared_process": [],
+    "2CJ1QFTUK:shared_process": [
+      {
+        "name": "search_20170427_122816_1490069680",
+        "object": [
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOrYEUet1mo5UwK_",
+            "source": "{\"path\":\"1996_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOS0EUet1mo5UwKu",
+            "source": "{\"path\":\"1996_1\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAO2OEUet1mo5UwLG",
+            "source": "{\"path\":\"2003_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAO2OEUet1mo5UwLH",
+            "source": "{\"path\":\"2002_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOHpEUet1mo5UwKo",
+            "source": "{\"path\":\"1994_1\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAO_JEUet1mo5UwLO",
+            "source": "{\"path\":\"2002_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOHpEUet1mo5UwKn",
+            "source": "{\"path\":\"1996_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPJUEUet1mo5UwLQ",
+            "source": "{\"path\":\"1992_5\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOcEEUet1mo5UwKy",
+            "source": "{\"path\":\"1993-4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPkWEUet1mo5UwLp",
+            "source": "{\"path\":\"2003_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOkxEUet1mo5UwK7",
+            "source": "{\"path\":\"1997_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPRFEUet1mo5UwLU",
+            "source": "{\"path\":\"1994_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOcEEUet1mo5UwKw",
+            "source": "{\"path\":\"1999_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAN_OEUet1mo5UwKm",
+            "source": "{\"path\":\"1992_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOkJEUet1mo5UwK3",
+            "source": "{\"path\":\"1992_6\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOSeEUet1mo5UwKq",
+            "source": "{\"path\":\"1998_1\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOcEEUet1mo5UwKx",
+            "source": "{\"path\":\"2003_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOrYEUet1mo5UwK-",
+            "source": "{\"path\":\"1991_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPXEEUet1mo5UwLa",
+            "source": "{\"path\":\"1998_3\"}"
+          }
+        ]
+      }
+    ],
+    "2CEZKPRAF:shared_process": []
+  },
+  "config": {
+    "looknfeel": "default",
+    "personalizedMode": "false"
+  },
+  "info": {}
+}

@@ -39,17 +39,18 @@
       "progressUpdateIntervalMs": 500
     },
     {
-      "text": "%elasticsearch\nsearch /chigun/issues {\n  \"_source\" : [\"path\"],\n  \"query\" : {\n    \"fuzzy\" : {\n      \"body\" : {\n        \"value\" : \"${term}\",\n        \"boost\" : 1.0\n      }\n    }\n  },\n\n \"highlight\" : {\n        \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n        \"post_tags\" : [\"\u003c/em\u003e\"],\n        \"fields\" : {\n            \"body\" : {}\n        }\n    }\n}\n",
+      "text": "%elasticsearch\nsearch /chigun/issues {\n  \"_source\" : [\"path\"],\n  \"sort\" : [{\"_score\" : \"desc\"}],\n  \"query\" : {\n    \"fuzzy\" : {\n      \"body\" : {\n        \"value\" : \"${term}\",\n        \"boost\" : 1.0\n      }\n    }\n  },\n\n \"highlight\" : {\n        \"pre_tags\" : [\"\u003cem style\u003d\u0027color:red;\u0027\u003e\"],\n        \"post_tags\" : [\"\u003c/em\u003e\"],\n        \"fields\" : {\n            \"body\" : {}\n        }\n    }\n}\n",
       "user": "anonymous",
-      "dateUpdated": "Apr 27, 2017 12:32:26 PM",
+      "dateUpdated": "May 4, 2017 9:59:04 AM",
       "config": {
         "colWidth": 12.0,
         "enabled": true,
         "results": {},
         "editorSetting": {
-          "editOnDblClick": false
+          "editOnDblClick": false,
+          "language": "text"
         },
-        "editorMode": "ace/mode/undefined"
+        "editorMode": "ace/mode/text"
       },
       "settings": {
         "params": {
@@ -68,7 +69,7 @@
         "msg": [
           {
             "type": "TABLE",
-            "data": "path\n2002_2\n1996_1\n1994_1\n1992_5\n2002_3\n1991_4\n1997_4\n1996_3\n1996_4\n1998_3\n"
+            "data": "path\n1996_4\n1996_1\n2003_3\n2002_2\n1994_1\n2002_3\n1996_3\n1992_5\n1993-4\n2003_4\n1997_4\n1994_4\n1999_3\n1992_4\n1992_6\n1998_1\n2003_2\n1991_4\n1998_3\n"
           }
         ]
       },
@@ -76,8 +77,8 @@
       "jobName": "paragraph_1493296096040_-934981471",
       "id": "20170427-122816_1490069680",
       "dateCreated": "Apr 27, 2017 12:28:16 PM",
-      "dateStarted": "Apr 27, 2017 12:32:26 PM",
-      "dateFinished": "Apr 27, 2017 12:32:27 PM",
+      "dateStarted": "May 4, 2017 9:59:04 AM",
+      "dateFinished": "May 4, 2017 9:59:07 AM",
       "status": "FINISHED",
       "progressUpdateIntervalMs": 500
     },
@@ -265,138 +266,154 @@
   "name": "Test ElasticSearch",
   "id": "2CE283YMD",
   "angularObjects": {
-    "2CEN1WWVS:shared_process": [],
-    "2CH8N6H83:shared_process": [],
-    "2CFDV17ZA:shared_process": [],
-    "2CDUS3ZN7:shared_process": [],
-    "2CF4RQWRK:shared_process": [],
-    "2CG87DAGU:shared_process": [],
-    "2CGCJXQ5U:shared_process": [
+    "2CH82G77V:shared_process": [],
+    "2CH38J6EV:shared_process": [],
+    "2CGHD78CH:shared_process": [],
+    "2CGPA72C5:shared_process": [],
+    "2CJ4WS7ED:shared_process": [],
+    "2CHPS76W8:shared_process": [],
+    "2CHH2X1NE:shared_process": [],
+    "2CJ1QFTUK:shared_process": [
       {
-        "name": "search_20170427_211714_806483006",
+        "name": "search_20170427_122816_1490069680",
         "object": [
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTUM5yxSobqRSl8L7",
-            "source": "{\"path\":\"2003_5\"}"
+            "id": "AVuqAOrYEUet1mo5UwK_",
+            "source": "{\"path\":\"1996_4\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTUxmyxSobqRSl8MQ",
-            "source": "{\"path\":\"1992_5\"}"
+            "id": "AVuqAOS0EUet1mo5UwKu",
+            "source": "{\"path\":\"1996_1\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTU6FyxSobqRSl8MZ",
-            "source": "{\"path\":\"2003_6\"}"
+            "id": "AVuqAO2OEUet1mo5UwLG",
+            "source": "{\"path\":\"2003_3\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTVITyxSobqRSl8Ml",
-            "source": "{\"path\":\"1995_1\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuvTVIUyxSobqRSl8Mm",
-            "source": "{\"path\":\"1994_2\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuvTVf-yxSobqRSl8M3",
-            "source": "{\"path\":\"1993-3\"}"
-          }
-        ]
-      },
-      {
-        "name": "search_20170427_123313_865413329",
-        "object": [
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuvTUygyxSobqRSl8MV",
-            "source": "{\"path\":\"1993-4\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuvTUaEyxSobqRSl8MA",
-            "source": "{\"path\":\"2001_5-6\"}"
-          },
-          {
-            "parser": {},
-            "index": "chigun",
-            "type": "issues",
-            "id": "AVuvTUM5yxSobqRSl8L6",
+            "id": "AVuqAO2OEUet1mo5UwLH",
             "source": "{\"path\":\"2002_2\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTVmXyxSobqRSl8M_",
-            "source": "{\"path\":\"1991_4\"}"
+            "id": "AVuqAOHpEUet1mo5UwKo",
+            "source": "{\"path\":\"1994_1\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTVITyxSobqRSl8Mk",
-            "source": "{\"path\":\"1991_3\"}"
+            "id": "AVuqAO_JEUet1mo5UwLO",
+            "source": "{\"path\":\"2002_3\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTUrRyxSobqRSl8MO",
+            "id": "AVuqAOHpEUet1mo5UwKn",
+            "source": "{\"path\":\"1996_3\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPJUEUet1mo5UwLQ",
+            "source": "{\"path\":\"1992_5\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOcEEUet1mo5UwKy",
+            "source": "{\"path\":\"1993-4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPkWEUet1mo5UwLp",
+            "source": "{\"path\":\"2003_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOkxEUet1mo5UwK7",
+            "source": "{\"path\":\"1997_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPRFEUet1mo5UwLU",
+            "source": "{\"path\":\"1994_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOcEEUet1mo5UwKw",
             "source": "{\"path\":\"1999_3\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTUHQyxSobqRSl8L4",
-            "source": "{\"path\":\"2002_4\"}"
+            "id": "AVuqAN_OEUet1mo5UwKm",
+            "source": "{\"path\":\"1992_4\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTUygyxSobqRSl8MT",
-            "source": "{\"path\":\"1991_2\"}"
+            "id": "AVuqAOkJEUet1mo5UwK3",
+            "source": "{\"path\":\"1992_6\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTUjPyxSobqRSl8ME",
-            "source": "{\"path\":\"2001_4\"}"
+            "id": "AVuqAOSeEUet1mo5UwKq",
+            "source": "{\"path\":\"1998_1\"}"
           },
           {
             "parser": {},
             "index": "chigun",
             "type": "issues",
-            "id": "AVuvTVgCyxSobqRSl8M4",
+            "id": "AVuqAOcEEUet1mo5UwKx",
             "source": "{\"path\":\"2003_2\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAOrYEUet1mo5UwK-",
+            "source": "{\"path\":\"1991_4\"}"
+          },
+          {
+            "parser": {},
+            "index": "chigun",
+            "type": "issues",
+            "id": "AVuqAPXEEUet1mo5UwLa",
+            "source": "{\"path\":\"1998_3\"}"
           }
         ]
       }
     ],
-    "2CF85ZWM9:shared_process": [],
-    "2CFFX1KZW:shared_process": []
+    "2CEZKPRAF:shared_process": []
   },
   "config": {
     "looknfeel": "default",
